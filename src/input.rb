@@ -1,17 +1,19 @@
-class Net
-  attr_accessor :places, :transitions, :flow, :weight, :marks
-
-  def initialize(one, two, three, four, five)
-    self.places = one
-    self.transitions = two
-    self.flow = three
-    self.weight = four
-    self.marks = five
-  end
+puts("String eingeben!")
+pm = gets.chomp
 
 
-end
+places = gets.chomp
+allPlaces = []
+transitions = gets.chomp
+flow = gets.chomp
 
+graph = File.new("graph.gv","w")
+graph.puts(places)
+graph.puts(transitions)
+graph.puts(flow)
+graph.close
 
-net = Net.new("", "", "", "", "")
+puts places
+puts transitions
+puts flow
 
