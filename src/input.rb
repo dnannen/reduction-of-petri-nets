@@ -11,8 +11,6 @@ places = placestring.split(',')
 transitions = transitionstring.split(',')
 flow = flowstring.split(';')
 
-
-
 # Making the graphViz-File
 graph = File.new("graph.gv","w")
 
@@ -35,6 +33,16 @@ transitions.each do |transition|
 end
 
 # Adding the flow relation to graphViz-File
+flownew = flow.to_s.split(',')
+flownew.each do |bow|
+  puts bow
 
-graph.puts flow
+
+  #graph.print '"'
+  #graph.print bow
+  #graph.print '"->"'
+  #graph.print bow
+  #graph.puts '"'
+end
+graph.print('}')
 graph.close
