@@ -7,10 +7,6 @@ placestring = gets.chomp
 transitionstring = gets.chomp
 flowstring = gets.chomp
 
-
-
-
-
 # Placing the net compartments in arrays
 places = placestring.split(',')
 transitions = transitionstring.split(',')
@@ -38,14 +34,23 @@ transitions.each do |transition|
 end
 
 # Adding the flow relation to graphViz-Files
-
-flow.to_a
-    .each_slice(2) do |bow|
-  graph.print '"'
-  graph.print bow
-  graph.print '"->"'
-  graph.print bow
-  graph.puts '"'
+index = 0
+first = true
+flow.each do
+  if flow[index].to_s == 'f'
+    first = true
+    index += 1
+  end
+  if first == true
+    graph.print '"'
+    graph.print flow[index]
+    first = false
+  else
+    graph.print '"->"'
+    graph.print flow[index]
+    graph.puts '"'
+  end
+  index += 1
 end
 
 graph.print('}')
