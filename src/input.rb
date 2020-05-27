@@ -14,7 +14,7 @@ flowstring = gets.chomp
 # Placing the net compartments in arrays
 places = placestring.split(',')
 transitions = transitionstring.split(',')
-flow = flowstring.split(';')
+flow = flowstring.split(',')
 
 # Making the graphViz-File
 graph = File.new('graph.gv', 'w')
@@ -38,11 +38,13 @@ transitions.each do |transition|
 end
 
 # Adding the flow relation to graphViz-Files
-flow.to_s.split(',').each do |bow|
+
+flow.to_a
+    .each_slice(2) do |bow|
   graph.print '"'
-  graph.print bow.chomp('[')
+  graph.print bow
   graph.print '"->"'
-  graph.print bow.chomp(']')
+  graph.print bow
   graph.puts '"'
 end
 
