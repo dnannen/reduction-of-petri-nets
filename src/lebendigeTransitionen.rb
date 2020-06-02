@@ -14,12 +14,10 @@ flow.each do |f|
   index += 1
 end
 
-
-
 run = 0
 transitions.each do |t|
   # Finde eine Transition ohne Vorbereich
-  if from.include?(t) and !(to.include?(t))
+  if from.include?(t) && !to.include?(t)
     # Lösche die gefundene Transition ...
     transitions.delete(t)
     # ... und ihren Nachbereich
@@ -81,5 +79,3 @@ end
 
 graph.print('}')
 graph.close
-
-
