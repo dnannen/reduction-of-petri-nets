@@ -3,7 +3,6 @@ transitions = %w[t1 t2 t3 t4]
 flow = %w[t1 s1 f s1 t2 f t2 s3 f s2 t2 f t3 s1 f s3 t3 f s3 t4 f t4 s2 f]
 
 index = 0
-reduce = false
 transitions.each do |t|
   if flow[index] == t and (flow[index - 1] = nil || flow[index - 1] = 'f')
     # t ist Sartpunkt eines Übergangs

@@ -10,7 +10,19 @@ flowstring = gets.chomp
 # Placing the net compartments in arrays
 places = placestring.split(',')
 transitions = transitionstring.split(',')
+# Change the flow into 'from' and 'to'
 flow = flowstring.split(',')
+index = 0
+from = []
+to = []
+flow.each do |f|
+  if (index.even?)
+    from.append(f)
+  else
+    to.append(f)
+  end
+  index += 1
+end
 
 # Making the graphViz-File
 graph = File.new('graph.gv', 'w')
@@ -35,7 +47,9 @@ end
 
 # Adding the flow relation to graphViz-Files
 index = 0
-first = true
+from.each do
+
+end
 flow.each do
   if flow[index].to_s == 'f'
     first = true
@@ -55,7 +69,3 @@ end
 
 graph.print('}')
 graph.close
-
-
-
-
