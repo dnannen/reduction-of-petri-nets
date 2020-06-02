@@ -16,7 +16,7 @@ index = 0
 from = []
 to = []
 flow.each do |f|
-  if (index.even?)
+  if(index.even?)
     from.append(f)
   else
     to.append(f)
@@ -47,23 +47,12 @@ end
 
 # Adding the flow relation to graphViz-Files
 index = 0
-from.each do
-
-end
-flow.each do
-  if flow[index].to_s == 'f'
-    first = true
-    index += 1
-  end
-  if first == true
-    graph.print '"'
-    graph.print flow[index]
-    graph.print '"->"'
-    first = false
-  else
-    graph.print flow[index]
-    graph.puts '"'
-  end
+from.each do |f|
+  graph.print '"'
+  graph.print f
+  graph.print '"->"'
+  graph.print(to[index])
+  graph.puts '"'
   index += 1
 end
 

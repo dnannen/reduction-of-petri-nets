@@ -1,22 +1,50 @@
 places = %w[s1 s2 s3]
 transitions = %w[t1 t2 t3 t4]
-flow = %w[t1 s1 f s1 t2 f t2 s3 f s2 t2 f t3 s1 f s3 t3 f s3 t4 f t4 s2 f]
+flow = %w[t1 s1 s1 t2 t2 s3 s2 t2 t3 s1 s3 t3 s3 t4 t4 s2]
 
 index = 0
-transitions.each do |t|
-  if flow[index] == t and (flow[index - 1] = nil || flow[index - 1] = 'f')
-    # t ist Sartpunkt eines Übergangs
-    transitions.delete(t)
-    flow.delete_at(index)
-    flow.delete_at(index + 1)
-    flow.delete_at(index + 2)
-    places.each do |s|
-      if flow[index + 1] == s
-        places.delete(s)
-      end
-    end
+from = []
+to = []
+flow.each do |f|
+  if index.even?
+    from.append(f)
+  else
+    to.append(f)
   end
   index += 1
+end
+
+
+
+run = 0
+transitions.each do |t|
+  # Finde eine Transition ohne Vorbereich
+  if from.include?(t) and !(to.include?(t))
+    # Lösche die gefundene Transition ...
+    transitions.delete(t)
+    # ... und ihren Nachbereich
+    places.delete_at(run)
+  end
+  run += 1
+end
+
+# Entferne anschließend alle überflüssig gewordenen Bögen
+run = 0
+from.each do |f|
+  unless places.include?(f) || transitions.include?(f)
+    from.delete(f)
+    to.delete_at(run)
+  end
+  run += 1
+end
+
+run = 0
+to.each do |o|
+  unless places.include?(o) || transitions.include?(o)
+    to.delete(o)
+    from.delete_at(run)
+  end
+  run += 1
 end
 
 # Making the graphViz-File
@@ -42,23 +70,16 @@ end
 
 # Adding the flow relation to graphViz-Files
 index = 0
-first = true
-flow.each do
-  if flow[index].to_s == 'f'
-    first = true
-    index += 1
-  end
-  if first == true
-    graph.print '"'
-    graph.print flow[index]
-    graph.print '"->"'
-    first = false
-  else
-    graph.print flow[index]
-    graph.puts '"'
-  end
+from.each do |f|
+  graph.print '"'
+  graph.print f
+  graph.print '"->"'
+  graph.print(to[index])
+  graph.puts '"'
   index += 1
 end
 
 graph.print('}')
 graph.close
+
+
