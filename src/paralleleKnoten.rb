@@ -34,7 +34,3 @@ to.each do |o|
   end
 end
 pre.append('f')
-
-puts pre
-puts 'uwu'
-puts post
