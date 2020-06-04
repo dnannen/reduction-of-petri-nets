@@ -18,3 +18,26 @@ flow.each do |f|
   index += 1
 end
 
+
+
+
+
+
+# Entferne anschließend alle überflüssig gewordenen Bögen
+run = 0
+from.each do |f|
+  unless places.include?(f) || transitions.include?(f)
+    from.delete(f)
+    to.delete_at(run)
+  end
+  run += 1
+end
+
+run = 0
+to.each do |o|
+  unless places.include?(o) || transitions.include?(o)
+    to.delete(o)
+    from.delete_at(run)
+  end
+  run += 1
+end

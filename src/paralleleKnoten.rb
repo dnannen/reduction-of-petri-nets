@@ -19,18 +19,20 @@ end
 pre = post = []
 index = 0
 
-# Fülle Nachbereich
-from.each do |f|
-  if places.include?(f)
-    post.append(to[index])
+places.each do |s|
+  from.each do |f|
+    if s == f
+      post.append(to[index])
+    end
   end
-end
-post.append('f')
 
-# Fülle Vorbereich
-to.each do |o|
-  if places.include?(o)
-    pre.append(from[index])
+  to.each do |o|
+    if s == o
+      pre.append(from[index])
+    end
   end
+  index += 1
 end
-pre.append('f')
+
+puts pre
+puts post
