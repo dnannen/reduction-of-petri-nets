@@ -1,27 +1,13 @@
+puts "pn-String eingeben!"
 pnstring = gets.chomp.split("-m")
+# -p"s1:a,b;s2:c;s3:;;a:s2;b:s3;c:s3;;" -m"1,0,0"
 
 # Aufteilen des pn-Strings
 pn = pnstring[0]
 p = pn.split(";;")[0]
 st = p.split('"')[1].split(';')
-ts = pn.split(";;")[1].split(';')
+stellen = []
 
-# Markierung der Stellen
-marken = pnstring[1].delete('"').split(',')
-
-
-# Ausgabe der GraphViz-Datei
-graph = File.new('graph.gv', 'w')
-
-# Die ersten zwei Zeilen für die .dot-Syntax
-graph.puts('digraph petrinet{')
-graph.puts('node[shape=circle];')
-
-uebergaenge = st.concat ts
-
-puts uebergaenge
-
-
-
-graph.print('}')
-graph.close
+puts stellen
+puts transitionen
+puts marken
