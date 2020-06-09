@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 class PetriNetz
-  attr_accessor :pnstring, :stellen, :transitionen, :fluss, :markierung, :anzahl_stellen, :anzahl_transitionen
+  attr_accessor :pnstring, :stellen, :transitionen, :fluss, :markierung,
+                :anzahl_stellen, :anzahl_transitionen
 
   # Initialisiert das Petri-Netz-Objekt
   def initialize(pnstring, marken)
     @pnstring = pnstring
     @stellen = []
     @transitionen = []
-    @fluss = Hash.new
+    @fluss = {}
     @markierung = marken.split(',')
 
     # Aufteilen des pn-Strings in die entsprechenden Nachbarlisten.
@@ -19,9 +22,7 @@ class PetriNetz
     nachbarliste_stellen.each do |nachbar|
       teile = nachbar.split(':')
       @stellen.push(teile[0])
-      if teile.length > 1
-        @fluss[teile[0]] = teile[1].split(',')
-      end
+      @fluss[teile[0]] = teile[1].split(',') if teile.length > 1
     end
 
     # Füllt das Array für die Transitionen.
@@ -29,9 +30,7 @@ class PetriNetz
     nachbarliste_transitionen.each do |nachbar|
       teile = nachbar.split(':')
       @transitionen.push(teile[0])
-      if teile.length > 1
-        @fluss[teile[0]] = teile[1].split(',')
-      end
+      @fluss[teile[0]] = teile[1].split(',') if teile.length > 1
     end
     @anzahl_stellen = @stellen.length
     @anzahl_transitionen = @transitionen.length
@@ -75,7 +74,8 @@ class PetriNetz
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6;t3:s1,s2;;', '1,1,0,0,0,0')
+beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6
+                                ;t3:s1,s2;;', '1,1,0,0,0,0')
 
 # Tests
 # p beispiel.fluss
