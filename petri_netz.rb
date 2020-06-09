@@ -17,34 +17,72 @@ class PetriNetz
     # Füllt das Array für die Stellen.
     # Fügt die von den Stellen ausgehenden Übergänge dem Fluss hinzu.
     nachbarliste_stellen.each do |nachbar|
-      teile = nachbar.split(":")
+      teile = nachbar.split(':')
       @stellen.push(teile[0])
-      if (teile.length > 1)
-        @fluss[teile[0]] = teile[1].split(",")
+      if teile.length > 1
+        @fluss[teile[0]] = teile[1].split(',')
       end
     end
 
     # Füllt das Array für die Transitionen.
     # Fügt die von den Transitionen ausgehenden Übergänge dem Fluss hinzu.
     nachbarliste_transitionen.each do |nachbar|
-      teile = nachbar.split(":")
+      teile = nachbar.split(':')
       @transitionen.push(teile[0])
-      if (teile.length > 1)
-        @fluss[teile[0]] = teile[1].split(",")
+      if teile.length > 1
+        @fluss[teile[0]] = teile[1].split(',')
       end
     end
     @anzahl_stellen = @stellen.length
     @anzahl_transitionen = @transitionen.length
   end
+
+  # Erzeugt die GraphViz-Datei, die das Netz grafisch darstellt
+  def gv
+    # Erzeugen der Datei und die ersten Zeilen, die die Datei ausmachen
+    graph = File.new('petri-netz.gv', 'w')
+    graph.puts('digraph petrinet{')
+    graph.puts('node[shape=circle];')
+
+    # Fügt der Datei die Stellen gemäß der Syntax hinzu
+    @stellen.each do |s|
+      graph.puts '"' + s + '";'
+    end
+
+    # Fügt der Datei die Transitionen gemäß der Syntax hinzu
+    @transitionen.each do |t|
+      graph.puts '"' + t + '" [shape=box];'
+    end
+
+    # Fügt die Übergänge aus der Flussrelation gemäß der Syntax hinzu
+    @fluss.each do |key, value|
+      # Fallunterscheidung:
+      # Hat ein Knoten mehrere Nachfolger, müssen alle einzeln eingetragen werden
+      if value.length > 1
+        value.each do |v|
+          graph.puts '"' + key.to_s + '"->"' + v + '"'
+        end
+      # Ansonsten ist keine Sonderbehandlung nötig
+      else
+        graph.puts '"' + key.to_s + '"->"' + value.join(', ') + '"'
+      end
+    end
+
+    # Syntaktisches Ende der Datei und Ausgabe
+    graph.print('}')
+    graph.close
+  end
 end
 
 # Testobjekt
-beispiel = PetriNetz.new("s1:a,b;s2:c;s3:;;a:s2;b:s3;c:s3;;", "1,0,0")
+beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6;t3:s1,s2;;', '1,1,0,0,0,0')
 
 # Tests
-p beispiel.fluss
-p beispiel.stellen
-p beispiel.transitionen
-p beispiel.markierung
-p beispiel.anzahl_stellen
-p beispiel.anzahl_transitionen
+# p beispiel.fluss
+# p beispiel.stellen
+# p beispiel.transitionen
+# p beispiel.markierung
+# p beispiel.anzahl_stellen
+# p beispiel.anzahl_transitionen
+
+beispiel.gv
