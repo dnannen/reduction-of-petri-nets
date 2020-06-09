@@ -71,6 +71,13 @@ class PetriNetz
     graph.print('}')
     graph.close
   end
+
+  def testnetz
+    p @fluss
+    p @stellen
+    p @transitionen
+    p @markierung
+  end
 end
 
 # Testobjekt
@@ -78,11 +85,5 @@ beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6
                                 ;t3:s1,s2;;', '1,1,0,0,0,0')
 
 # Tests
-# p beispiel.fluss
-# p beispiel.stellen
-# p beispiel.transitionen
-# p beispiel.markierung
-# p beispiel.anzahl_stellen
-# p beispiel.anzahl_transitionen
-
-beispiel.gv
+# beispiel.testNetz
+# beispiel.gv
