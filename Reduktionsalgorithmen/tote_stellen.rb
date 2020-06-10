@@ -10,8 +10,9 @@ tot = PetriNetz.new("s1:t1;s2:t3,t4;s3:t1;s4:t4;;t1:s2;t2:s3;t3:s4;t4:s3;;", "0,
 # nur umgedreht und für die Stellen anstatt der Transitionen.
 tot.stellen.each do |s|
   tot.fluss.each do |von, nach|
+    # Prüfe zuerst die Übergänge.
     break if von.include? s
-    #
+    # Wird eine Stelle ohne Vorbereich gefunden
     next unless (nach.include? s) && !(von.include? s)
     #
   end
