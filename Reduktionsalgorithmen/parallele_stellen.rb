@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require 'C:\Users\Domin\RubymineProjects\reduction-of-petri-nets\petri_netz.rb'
-# TODO: Pfad später ändern auf lib, ...
+require File.join(Dir.pwd, 'petri_netz.rb')
 
 # Testobjekt für diesen Reduktionsschritt
-parallel = PetriNetz.new("s1:t3;s2:t3;;t1:s1;t1:s2;t2:s1;t2:s2", '0, 1')
+parallel = PetriNetz.new('s1:t3;s2:t3;;t1:s1,s2;t2:s1,s2;t3:;;', '0, 1')
 
 # Um diese Reduktionsregel anzuwenden müssen zunächst alle Stellen miteinander
 # geprüft werden, ob sie parallel sind.
@@ -16,7 +15,10 @@ parallel.stellen.each do |s1|
   parallel.stellen.each do |s2|
     # Beide Stellen sind gleich, das wollen wir nicht:
     unless s1 == s2
-
+      p s1,s2
     end
   end
 end
+
+# parallel.testnetz
+# parallel.gv

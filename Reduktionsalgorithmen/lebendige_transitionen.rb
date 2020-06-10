@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'C:\Users\Domin\RubymineProjects\reduction-of-petri-nets\petri_netz.rb'
-# TODO: Pfad später ändern auf lib, ...
+require File.join(Dir.pwd, 'petri_netz.rb')
 
 # Testobjekt für diesen Reduktionsschritt
 lebendig = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1;t2:s3;t3:s1;t4:s2;;', '0,1,0')
@@ -14,8 +13,7 @@ lebendig.transitionen.each do |t|
   lebendig.fluss.each do |von, nach|
     # Kommt t im Nachbereich vor, kann woanders weitergesucht werden.
     break if nach.include? t
-    # Wird allerdings ein Reduktionsfall gefunden,
-    # kann reduziert werden.
+    # Wird allerdings ein Reduktionsfall gefunden kann reduziert werden.
     next unless von.include? t
 
     # Prüfe für jede Stelle, ob sie im Nachbereich von t liegt.
