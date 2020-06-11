@@ -38,7 +38,7 @@ class PetriNetz
     @anzahl_stellen = @stellen.length
     @anzahl_transitionen = @transitionen.length
 
-    # Erstelle die Matrix hin, mit den Einträgen f(t,s)
+    # Erstelle die Matrix hin, mit den Einträgen f(s,t)
     @stellen.each do |s|
       matrix = []
       @fluss.values_at(s).each_with_index do |f, i|
@@ -60,24 +60,20 @@ class PetriNetz
     end
 
     # Erstelle die Matrix hin, mit den Einträgen f(t,s)
-    @transitionen.each do |t|
+    @stellen.each do |s|
       matrix = []
-      @fluss.values_at(t).each do |f|
-        if f.nil?
+      @transitionen.each_with_index do |t, i|
+        if @fluss.values_at(t).join(', ').include?(s)
+          matrix[i] = 1
+        elsif @fluss.values_at(t).join(', ').nil?
           stellen.each do
             matrix.append(0)
           end
         else
-          @stellen.each_with_index do |s, i|
-            if f[i] == s
-              matrix.append(1)
-            else
-              matrix.append(0)
-            end
-          end
+          matrix.append(0)
         end
       end
-      hin.append(matrix)
+      hin.append matrix
     end
   end
 
@@ -131,5 +127,5 @@ end
 beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6;t3:s1,s2;;', '1,1,0,0,0,0')
 
 # Tests
-beispiel.testnetz
+# beispiel.testnetz
 # beispiel.gv
