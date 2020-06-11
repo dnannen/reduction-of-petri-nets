@@ -2,7 +2,8 @@
 
 class PetriNetz
   attr_accessor :pnstring, :stellen, :transitionen, :fluss, :markierung,
-                :anzahl_stellen, :anzahl_transitionen
+                :anzahl_stellen, :anzahl_transitionen,
+                :hin, :her
 
   # Initialisiert das Petri-Netz-Objekt
   def initialize(pnstring, marken)
@@ -11,6 +12,8 @@ class PetriNetz
     @transitionen = []
     @fluss = {}
     @markierung = marken.split(',')
+    @hin = []
+    @her = []
 
     # Aufteilen des pn-Strings in die entsprechenden Nachbarlisten.
     # Diese werden weiter unten verarbeitet und in die Arrays der entsprechenden Knoten geschrieben.
@@ -34,6 +37,48 @@ class PetriNetz
     end
     @anzahl_stellen = @stellen.length
     @anzahl_transitionen = @transitionen.length
+
+    # Erstelle die Matrix hin, mit den Einträgen f(t,s)
+    @stellen.each do |s|
+      matrix = []
+      @fluss.values_at(s).each_with_index do |f, i|
+        if f.nil?
+          stellen.each do
+            matrix.append(0)
+          end
+        else
+          @transitionen.each do |t|
+            if f[i] == t
+              matrix.append(1)
+            else
+              matrix.append(0)
+            end
+          end
+        end
+      end
+      her.append(matrix)
+    end
+
+    # Erstelle die Matrix hin, mit den Einträgen f(t,s)
+    @transitionen.each do |t|
+      matrix = []
+      @fluss.values_at(t).each do |f|
+        if f.nil?
+          stellen.each do
+            matrix.append(0)
+          end
+        else
+          @stellen.each_with_index do |s, i|
+            if f[i] == s
+              matrix.append(1)
+            else
+              matrix.append(0)
+            end
+          end
+        end
+      end
+      hin.append(matrix)
+    end
   end
 
   # Erzeugt die GraphViz-Datei, die das Netz grafisch darstellt
@@ -77,13 +122,14 @@ class PetriNetz
     p @stellen
     p @transitionen
     p @markierung
+    p @hin
+    p @her
   end
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6
-                                ;t3:s1,s2;;', '1,1,0,0,0,0')
+beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6;t3:s1,s2;;', '1,1,0,0,0,0')
 
 # Tests
-# beispiel.testNetz
+beispiel.testnetz
 # beispiel.gv

@@ -10,7 +10,16 @@ aequivalent = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;;t1:s2;t2:s4;t3:s4;t4:s1', 
 # Die entsprechenden Nachtransitionen haben zu allen anderen Stellen
 # entweder identische Verbindung, oder gar keine.
 
+# s1 -> t2 -> s4
+# s2 -> t3 -> s4
+# s3 -> t1 -> s2
+# s4 -> t4 -> s1
+# Sind die Nachbereiche der Transitionen im Nachbereich äquivalent,
+# so sind es auch die Stellen in ihrem Vorbereich
 
+aequivalent.stellen.each do |s|
+
+end
 
 aequivalent.testnetz
 aequivalent.gv
