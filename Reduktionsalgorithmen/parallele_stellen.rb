@@ -10,31 +10,41 @@ parallel.stellen.each_with_index do |s1, i1|
   parallel.stellen.each_with_index do |s2, i2|
     # Ist der Vorbereich identisch?
     next unless parallel.hin[i1] == parallel.hin[i2]
+
     # Ist auch der Nachbereich identisch?
     if parallel.her[i1] == parallel.her[i2]
       # Streiche die Stelle mit mehr Marken
       # s1 hat mehr Marken und wird entfernt
       if parallel.markierung[i1] > parallel.markierung[i2]
+        # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
+        parallel.transitionen.each do |t|
+          parallel.pnstring.split(';;')[1].split(';').each do |p|
+            if p.include?(s1)
+              p.delete(s1)
+            end
+          end
+        end
         # Lösche den Übergang zum Nachbereich
         parallel.fluss.delete(s1)
         # Lösche die Markierung der Stelle
         parallel.markierung.delete_at(i1)
-        # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
-        #
-        # TODO
-        #
         # Lösche zum Schluss die Stelle selbst
         parallel.stellen.delete(s2)
       # s2 hat mehr Marken und wird entfernt
       elsif parallel.markierung[i2] > parallel.markierung[i1]
+        # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
+        parallel.transitionen.each do |t|
+          next if parallel.fluss.values_at(t).join(', ') == ''
+
+          if parallel.fluss.values_at(t).join(', ').include?(s2)
+            parallel.fluss.values_at(t).clear
+            parallel.fluss.values_at(t).append(parallel.stellen - [s2])
+          end
+        end
         # Lösche den Übergang zum Nachbereich
         parallel.fluss.delete(s2)
         # Lösche die Markierung der Stelle
         parallel.markierung.delete_at(i2)
-        # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
-        #
-        # TODO
-        #
         # Lösche zum Schluss die Stelle selbst
         parallel.stellen.delete(s2)
       end

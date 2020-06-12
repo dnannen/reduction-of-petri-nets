@@ -38,7 +38,7 @@ class PetriNetz
     @anzahl_stellen = @stellen.length
     @anzahl_transitionen = @transitionen.length
 
-    # Erstelle die Matrix hin, mit den Einträgen V(s,t)
+    # Erstelle die Matrix her, mit den Einträgen V(t,s)
     @stellen.each do |s|
       matrix = []
       @fluss.values_at(s).each_with_index do |f, i|
@@ -56,10 +56,10 @@ class PetriNetz
           end
         end
       end
-      her.append(matrix)
+      her.push matrix
     end
 
-    # Erstelle die Matrix hin, mit den Einträgen V(t,s)
+    # Erstelle die Matrix hin, mit den Einträgen V(s,t)
     @stellen.each do |s|
       matrix = []
       @transitionen.each_with_index do |t, i|
@@ -73,7 +73,7 @@ class PetriNetz
           matrix.append(0)
         end
       end
-      hin.append matrix
+      hin.push matrix
     end
   end
 
@@ -113,6 +113,13 @@ class PetriNetz
     graph.close
   end
 
+  # Gibt den pn-String des Netzes aus
+  def pn
+
+  end
+
+  # Gibt alle Parameter des Netzes aus,
+  # um es leichter testen zu können.
   def testnetz
     p @fluss
     p @stellen
