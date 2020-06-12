@@ -38,7 +38,7 @@ class PetriNetz
     @anzahl_stellen = @stellen.length
     @anzahl_transitionen = @transitionen.length
 
-    # Erstelle die Matrix hin, mit den Einträgen f(s,t)
+    # Erstelle die Matrix hin, mit den Einträgen V(s,t)
     @stellen.each do |s|
       matrix = []
       @fluss.values_at(s).each_with_index do |f, i|
@@ -59,7 +59,7 @@ class PetriNetz
       her.append(matrix)
     end
 
-    # Erstelle die Matrix hin, mit den Einträgen f(t,s)
+    # Erstelle die Matrix hin, mit den Einträgen V(t,s)
     @stellen.each do |s|
       matrix = []
       @transitionen.each_with_index do |t, i|
