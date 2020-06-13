@@ -115,7 +115,15 @@ class PetriNetz
 
   # Gibt den pn-String des Netzes aus
   def pn
+    string = ''
+    @stellen.each do |s|
+      p hin[@stellen.index(s)]
+      @transitionen.each_index do |i|
+        if hin[@stellen.index(s)][i] > 1
 
+        end
+      end
+    end
   end
 
   # Gibt alle Parameter des Netzes aus,
@@ -131,8 +139,9 @@ class PetriNetz
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6;t3:s1,s2;;', '1,1,0,0,0,0')
+beispiel = PetriNetz.new('s1:t1;s2:t3;;t1:s2;t2:;t3:s1;;', '1,1')
 
 # Tests
-# beispiel.testnetz
-# beispiel.gv
+beispiel.pn
+beispiel.testnetz
+beispiel.gv

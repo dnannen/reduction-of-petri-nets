@@ -5,6 +5,8 @@ require File.join(Dir.pwd, 'petri_netz.rb')
 # Testobjekt für diesen Reduktionsschritt
 lebendig = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1;t2:s3;t3:s1;t4:s2;;', '0,1,0')
 
+
+
 # Gehe nacheinander die Transitionen durch und prüfe, ob von ihnen Kanten ausgehen,
 # wenn ja, prüfe ob auch Kanten eingehen.
 # Sobald eine Kante gefunden wurde, die der Voraussetzung entspricht,
@@ -21,8 +23,8 @@ lebendig.transitionen.each do |t|
       # Sicherheitsprüfung
       if lebendig.fluss[t].nil?
         break
-      # Kommt s im Nachbereich von t vor, müssen s
-      # und alle an s hängenden Übergänge aus dem Netz entfernt werden.
+        # Kommt s im Nachbereich von t vor, müssen s
+        # und alle an s hängenden Übergänge aus dem Netz entfernt werden.
       elsif s.to_s == lebendig.fluss[t].join(', ')
         # Entferne die an t anhängenden Bögen
         lebendig.fluss.delete(t)

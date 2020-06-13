@@ -3,7 +3,7 @@
 require File.join(Dir.pwd, 'petri_netz.rb')
 
 # Testobjekt für diesen Reduktionsschritt
-parallel = PetriNetz.new('s1:t3;s2:t3;;t1:s1,s2;t2:s1,s2;t3:;;', '2,1')
+parallel = PetriNetz.new('s1:t3;s2:t3;;t1:s1,s2;t2:s1,s2;t3:;;', '0,1')
 
 # Prüfe je ein Paar an Stellen
 parallel.stellen.each_with_index do |s1, i1|
@@ -18,10 +18,10 @@ parallel.stellen.each_with_index do |s1, i1|
       if parallel.markierung[i1] > parallel.markierung[i2]
         # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
         parallel.transitionen.each do |t|
-          parallel.pnstring.split(';;')[1].split(';').each do |p|
-            if p.include?(s1)
-              p.delete(s1)
-            end
+          next if parallel.fluss.values_at(t).join(', ') == ''
+
+          if parallel.fluss.values_at(t).join(', ').include?(s1)
+            parallel.fluss[t] =  (parallel.stellen - [s1])
           end
         end
         # Lösche den Übergang zum Nachbereich
@@ -37,8 +37,7 @@ parallel.stellen.each_with_index do |s1, i1|
           next if parallel.fluss.values_at(t).join(', ') == ''
 
           if parallel.fluss.values_at(t).join(', ').include?(s2)
-            parallel.fluss.values_at(t).clear
-            parallel.fluss.values_at(t).append(parallel.stellen - [s2])
+            parallel.fluss[t] =  (parallel.stellen - [s2])
           end
         end
         # Lösche den Übergang zum Nachbereich
