@@ -41,43 +41,23 @@ class PetriNetz
     # Erstelle die Matrix her, mit den Einträgen V(t,s)
     @stellen.each do |s|
       matrix = []
-      @fluss.values_at(s).each_with_index do |f, i|
-        if f.nil?
-          stellen.each do
-            matrix.append(0)
-          end
-        else
-          @transitionen.each do |t|
-            if f[i] == t
-              matrix.append(1)
-            else
-              matrix.append(0)
-            end
-          end
-        end
+      @transitionen.each do |t|
+        matrix.append(@fluss.values_at(s).join(', ').split(', ').count(t))
       end
-      her.push matrix
+      @her.append(matrix)
     end
 
     # Erstelle die Matrix hin, mit den Einträgen V(s,t)
     @stellen.each do |s|
       matrix = []
       @transitionen.each_with_index do |t, i|
-        if @fluss.values_at(t).join(', ').include?(s)
-          matrix[i] = 1
-        elsif @fluss.values_at(t).join(', ').nil?
-          stellen.each do
-            matrix.append(0)
-          end
-        else
-          matrix.append(0)
-        end
+        matrix.append(@fluss.values_at(t).join(', ').split(', ').count(s))
       end
-      hin.push matrix
+      @hin.push matrix
     end
   end
 
-  # Erzeugt die GraphViz-Datei, die das Netz grafisch darstellt
+    # Erzeugt die GraphViz-Datei, die das Netz grafisch darstellt
   def gv
     # Erzeugen der Datei und die ersten Zeilen, die die Datei ausmachen
     graph = File.new('petri-netz.gv', 'w')
@@ -139,9 +119,9 @@ class PetriNetz
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s1:t1,t3;s2:t1;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
+beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6;t3:s1,s2;;','1,1,0,0,0,0')
 
 # Tests
 #beispiel.pn
 #beispiel.testnetz
-beispiel.gv
+#beispiel.gv

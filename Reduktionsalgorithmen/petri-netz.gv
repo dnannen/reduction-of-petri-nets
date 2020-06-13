@@ -1,8 +1,16 @@
 digraph petrinet{
 node[shape=circle];
-"s2";
-"s3";
+"s1";
+"t1" [shape=box];
 "t2" [shape=box];
-"s3"->"t2"
-"t2"->"s2"
+"t3" [shape=box];
+"t4" [shape=box];
+"s1"->"t1"
+"s1"->"t2"
+"s1"->"t2"
+"s1"->"t3"
+"t1"->"s1"
+"t2"->"s1"
+"t2"->"s1"
+"t3"->"s1"
 }

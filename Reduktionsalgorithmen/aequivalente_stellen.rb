@@ -5,26 +5,7 @@ require File.join(Dir.pwd, 'petri_netz.rb')
 # Testobjekt für diesen Reduktionsschritt
 aequivalent = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;;t1:s2;t2:s4;t3:s4;t4:s1', '0,1,0,0')
 
-# Zwei parallele Knoten haben jeweils genau eine Transition im Nachbereich,
-# die jeweiligen Bögen haben die Vielfachheit 1.
-# Die entsprechenden Nachtransitionen haben zu allen anderen Stellen
-# entweder identische Verbindung, oder gar keine.
-
-# Zuerst werden unpassende Stellen aus der zu überprüfenden Menge aussortiert:
-# Ziel: Fülle die Matrix r mit potentiellen Kandidaten für die Reduktion
-
-# aequivalent.stellen.each_with_index do |s, index|
-# Anforderung 1:
-# Es gibt genau eine Transition im Nachbereich
-# und die jeweiligen Bögen haben die Vielfachheit 1
-# if aequivalent.fluss.values_at(s).join(', ').split(', ').length > 1
-# r.delete(s)
-# end
-# Anforderung 2: Der Vorbereich ist nicht leer
-# r.delete(s) unless aequivalent.hin[index].include?(1)
-# end
-
-# Prüfe jeweils zwei Stellen aus den Kandidaten
+# Prüfe jeweils zwei Stellen
 aequivalent.stellen.each do |s1|
   # Voraussetzungen für jede Stelle:
   # Die Stelle darf nicht mehr als eine Einfachkante zum Nachbereich haben.
@@ -45,15 +26,17 @@ aequivalent.stellen.each do |s1|
       next
     end
     next if s1 == s2
+    next if aequivalent.fluss[s1] == aequivalent.fluss[s2]
 
-    # Die Transitionen im Nachbereich dürfen nicht gleich sein
-    next if aequivalent.hin[aequivalent.stellen.index(s1)] == aequivalent.hin[aequivalent.stellen.index(s2)]
-    p s1
-    p aequivalent.hin[aequivalent.stellen.index(s1)]
-    p s2
-    p aequivalent.hin[aequivalent.stellen.index(s2)]
-      # Der Nachbereich der Nachtransitionen der Stellen muss gleich sein.
+    #
+    if aequivalent.fluss.values_at(aequivalent.fluss[s1].join(', ')).join(', ') ==
+       aequivalent.fluss.values_at(aequivalent.fluss[s2].join(', ')).join(', ')
 
+      p s1
+      p s2
+    end
+
+    # if aequivalent.fluss[s1]
   end
 end
 # p r
