@@ -59,4 +59,4 @@ end
 # p r
 
 aequivalent.testnetz
-# aequivalent.gv1
+# aequivalent.gv

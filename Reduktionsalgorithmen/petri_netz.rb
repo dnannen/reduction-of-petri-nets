@@ -120,7 +120,7 @@ class PetriNetz
       p hin[@stellen.index(s)]
       @transitionen.each_index do |i|
         if hin[@stellen.index(s)][i] > 1
-
+          #TODO
         end
       end
     end
@@ -139,9 +139,9 @@ class PetriNetz
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s1:t1;s2:t3;;t1:s2;t2:;t3:s1;;', '1,1')
+beispiel = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1,s2;t2:s3;t3:s1;t4:s2;;', '0,1,0')
 
 # Tests
-beispiel.pn
-beispiel.testnetz
+#beispiel.pn
+#beispiel.testnetz
 beispiel.gv

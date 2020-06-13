@@ -21,7 +21,7 @@ parallel.stellen.each_with_index do |s1, i1|
           next if parallel.fluss.values_at(t).join(', ') == ''
 
           if parallel.fluss.values_at(t).join(', ').include?(s1)
-            parallel.fluss[t] =  (parallel.stellen - [s1])
+            parallel.fluss[t] = parallel.fluss[t] - [s1]
           end
         end
         # Lösche den Übergang zum Nachbereich
@@ -37,7 +37,7 @@ parallel.stellen.each_with_index do |s1, i1|
           next if parallel.fluss.values_at(t).join(', ') == ''
 
           if parallel.fluss.values_at(t).join(', ').include?(s2)
-            parallel.fluss[t] =  (parallel.stellen - [s2])
+            parallel.fluss[t] = parallel.fluss[t] - [s2]
           end
         end
         # Lösche den Übergang zum Nachbereich
