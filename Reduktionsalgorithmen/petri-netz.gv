@@ -8,7 +8,6 @@ node[shape=circle];
 "t2" [shape=box];
 "t4" [shape=box];
 "s1"->"t2"
-"s2"->"t3"
 "s3"->"t1"
 "s4"->"t4"
 "s5"->"t2"

@@ -56,6 +56,8 @@ kandidaten.each do |s1|
         aequ.fluss[aequ.fluss.key(f)] = aequ.fluss[aequ.fluss.key(f)] - aequ.fluss.values_at(s2).join(', ').split(', ')
       end
     end
+    # Lösche die Übergänge der Stelle s2
+    aequ.fluss.delete(s2)
     # Lösche die Stelle s2
     aequ.stellen.delete(s2)
   end
