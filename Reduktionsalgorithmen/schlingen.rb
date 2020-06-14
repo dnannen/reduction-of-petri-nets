@@ -10,6 +10,7 @@ schlinge.transitionen.each do |t|
     # Vorbereich identisch mit Nachbereich
     next unless schlinge.hin.join(', ').split(', ')[schlinge.transitionen.index(t)] ==
                 schlinge.her.join(', ').split(', ')[schlinge.transitionen.index(t)]
+
     # Der Vorbereich von t ist komplett im Vorbereich einer
     # weiteren Transition t0 enthalten.
     # Prüfe daher für jede Stelle
