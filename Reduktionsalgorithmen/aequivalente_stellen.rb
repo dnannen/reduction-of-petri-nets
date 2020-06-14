@@ -3,43 +3,63 @@
 require File.join(Dir.pwd, 'petri_netz.rb')
 
 # Testobjekt für diesen Reduktionsschritt
-aequivalent = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;;t1:s2;t2:s4;t3:s4;t4:s1', '0,1,0,0')
+aequ = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;s5:t2,t3;;t1:s2;t2:s4;t3:s4;t4:s1', '0,1,0,0')
 
+# Fülle das Array Kandidaten mit den Stellen, die der Voraussetzung entsprechen
+kandidaten = []
 # Prüfe jeweils zwei Stellen
-aequivalent.stellen.each do |s1|
-  # Voraussetzungen für jede Stelle:
+aequ.stellen.each do |s|
   # Die Stelle darf nicht mehr als eine Einfachkante zum Nachbereich haben.
-  if aequivalent.fluss.values_at(s1).join(', ').split(', ').length > 1
-    next
+  next if aequ.fluss.values_at(s).join(', ').split(', ').length > 1
   # Die Stelle darf keinen leeren Vorbereich haben.
-  elsif !aequivalent.hin[aequivalent.stellen.index(s1)].include?(1)
-    next
-  end
+  next unless aequ.hin[aequ.stellen.index(s)].include?(1)
 
-  aequivalent.stellen.each do |s2|
-    # Voraussetzungen für jede Stelle, für den zweiten Durchlauf:
-    # Die Stelle darf nicht mehr als eine Einfachkante zum Nachbereich haben.
-    if aequivalent.fluss.values_at(s1).join(', ').split(', ').length > 1
-      next
-      # Die Stelle darf keinen leeren Vorbereich haben.
-    elsif !aequivalent.hin[aequivalent.stellen.index(s2)].include?(1)
-      next
-    end
-    next if s1 == s2
-    next if aequivalent.fluss[s1] == aequivalent.fluss[s2]
-
-    #
-    if aequivalent.fluss.values_at(aequivalent.fluss[s1].join(', ')).join(', ') ==
-       aequivalent.fluss.values_at(aequivalent.fluss[s2].join(', ')).join(', ')
-
-      p s1
-      p s2
-    end
-
-    # if aequivalent.fluss[s1]
-  end
+  kandidaten.append(s)
 end
-# p r
 
-aequivalent.testnetz
-# aequivalent.gv
+# Prüfe jeweils zwei Kandidaten
+kandidaten.each do |s1|
+  kandidaten.each do |s2|
+    # Sofern die Nachbereiche der Stellen nicht identisch sind ...
+    next if aequ.her[aequ.stellen.index(s1)] == aequ.her[aequ.stellen.index(s2)]
+
+    # und die Nachbereiche der Nachbereiche identisch sind
+    next unless aequ.fluss.values_at(aequ.fluss.values_at(s1).join(', ')).join(', ') ==
+                aequ.fluss.values_at(aequ.fluss.values_at(s2).join(', ')).join(', ')
+
+    # Prüfe alle Stellen die nicht s1 oder s2 sind
+    aequ.stellen.each do |s|
+      next unless s != s1 && s != s2
+      unless aequ.fluss.values_at(s).join(', ').include?(aequ.fluss.values_at(s1).join(', ')) &&
+             aequ.fluss.values_at(s).join(', ').include?(aequ.fluss.values_at(s2).join(', '))
+        # Gibt es eine solche Stelle die die Bedingung missachtet,
+        # breche die Reduktion ab und suche weiter
+        break
+      end
+    end
+    # Hier findet die eigentliche Reduktion statt
+    # Lösche den Nachbereich der Stelle s2
+    aequ.transitionen.delete(aequ.fluss[s2].join(', '))
+    # Die eingehenden Übergägne bei s2 werden auf s1 umgeleitet
+    aequ.fluss[aequ.fluss.key([s2])] = aequ.fluss[aequ.fluss.key([s2])] - [s2] + [s1]
+    # Addiere die Marken beider Stellen und lege sie auf s1
+    aequ.markierung[aequ.stellen.index(s1)] = (aequ.markierung[aequ.stellen.index(s1)].to_i +
+                                              aequ.markierung[aequ.stellen.index(s2)].to_i).to_s
+
+    # Lösche alle unbenötigten Übergänge
+    aequ.fluss.values.each do |f|
+      # Sofern nur t2 vorkommt, lösche den gesamten Übergang
+      if f == aequ.fluss.values_at(s2).join(', ').split(', ')
+        aequ.fluss.delete(f.join(', '))
+      # Ansonsten entferne nur s aus dem entsprechenden Nachbereich
+      elsif f.include?(aequ.fluss.values_at(s2).join(', '))
+        aequ.fluss[aequ.fluss.key(f)] = aequ.fluss[aequ.fluss.key(f)] - aequ.fluss.values_at(s2).join(', ').split(', ')
+      end
+    end
+    # Lösche die Stelle s2
+    aequ.stellen.delete(s2)
+  end
+  break
+end
+aequ.testnetz
+aequ.gv
