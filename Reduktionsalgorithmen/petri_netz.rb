@@ -63,6 +63,7 @@ class PetriNetz
     graph = File.new('petri-netz.gv', 'w')
     graph.puts('digraph petrinet{')
     graph.puts('node[shape=circle];')
+    graph.puts('rankdir=LR;')
 
     # Fügt der Datei die Stellen gemäß der Syntax hinzu
     @stellen.each do |s|

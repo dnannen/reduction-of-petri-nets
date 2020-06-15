@@ -15,7 +15,7 @@ schlinge.transitionen.each do |t|
     # weiteren Transition t0 enthalten.
     # Prüfe daher für jede Stelle
     schlinge.stellen.each do |s|
-
+      
     end
   end
 end
