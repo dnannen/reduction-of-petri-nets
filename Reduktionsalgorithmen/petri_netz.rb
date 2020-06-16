@@ -93,6 +93,43 @@ class PetriNetz
     graph.print('}')
     graph.close
   end
+  # --------------------------
+  #           UTILS
+  # --------------------------
+
+  #
+  def entferne_knoten(knoten)
+    # Der Knoten k ist eine Stelle,
+    # entferne also Stellen aus Übergängen von Transitionen
+    if @stellen.include?(knoten)
+      @transitionen.each do |t|
+        # Entferne die Übergänge der Transition t
+        if @fluss.values_at(t).join(', ').include?(knoten)
+          # Kommt nur k vor, lösche den Übergang komplett
+          if @fluss.values_at(t).join(', ') == knoten
+            @fluss.delete(t)
+          else
+            # Ansonsten entferne nur k aus dem Übergang
+            @fluss[t] = @fluss[t] - [knoten]
+          end
+        end
+      end
+      # Ansonsten: Ist der Knoten k eine Transition?
+    elsif @transitionen.include?(knoten)
+      @stellen.each do |s|
+        # Entferne die Übergänge der Stelle s
+        if @fluss.values_at(s).join(', ').include?(knoten)
+          # Kommt nur k vor, lösche den Übergang komplett
+          if @fluss.values_at(s).join(', ') == knoten
+            @fluss.delete(s)
+          else
+            # Ansonsten entferne nur k aus dem Übergang
+            @fluss[s] = @fluss[s] - [knoten]
+          end
+        end
+      end
+    end
+  end
 
   # Gibt den pn-String des Netzes aus
   def pn
@@ -120,9 +157,9 @@ class PetriNetz
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s1:t1;s2:t1;s3:t2;s4:t2;s5:t3;s6:t3;;t1:s3,s4;t2:s5,s6;t3:s1,s2;;','1,1,0,0,0,0')
+beispiel = PetriNetz.new('s1:t1,t2;;t1:s1;t2:s1;;', '1')
 
 # Tests
 #beispiel.pn
 #beispiel.testnetz
-#beispiel.gv
+beispiel.gv
