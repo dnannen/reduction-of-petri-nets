@@ -18,10 +18,12 @@ schlinge.transitionen.each do |t|
         if schlinge.fluss.values_at(n).join(', ').split(', ').include?(t0)
           # Streiche den Nachbereich von t
           schlinge.fluss[t].each do |s|
-            # Streiche alle Übergänge
-            schlinge.entferne_knoten(s)
             # Streiche die Markierung der Stelle s
             schlinge.markierung.delete(schlinge.stellen.index(s))
+
+            # Streiche alle Übergänge
+            schlinge.entferne_knoten(s)
+
             # Streiche die Stelle selber
             schlinge.stellen.delete(s)
           end

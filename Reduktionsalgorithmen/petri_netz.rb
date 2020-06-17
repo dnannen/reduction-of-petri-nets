@@ -39,25 +39,27 @@ class PetriNetz
     @anzahl_transitionen = @transitionen.length
 
     # Erstelle die Matrix her, mit den Einträgen V(t,s)
+    @her.clear
     @stellen.each do |s|
       matrix = []
       @transitionen.each do |t|
         matrix.append(@fluss.values_at(s).join(', ').split(', ').count(t))
       end
-      @her.append(matrix)
+      @her = @her.append(matrix)
     end
 
     # Erstelle die Matrix hin, mit den Einträgen V(s,t)
+    @hin.clear
     @stellen.each do |s|
       matrix = []
-      @transitionen.each_with_index do |t, i|
+      @transitionen.each_with_index do |t|
         matrix.append(@fluss.values_at(t).join(', ').split(', ').count(s))
       end
       @hin.push matrix
     end
   end
 
-    # Erzeugt die GraphViz-Datei, die das Netz grafisch darstellt
+  # Erzeugt die GraphViz-Datei, die das Netz grafisch darstellt
   def gv
     # Erzeugen der Datei und die ersten Zeilen, die die Datei ausmachen
     graph = File.new('petri-netz.gv', 'w')
@@ -93,9 +95,12 @@ class PetriNetz
     graph.print('}')
     graph.close
   end
+
+
   # --------------------------
   #           UTILS
   # --------------------------
+
 
   # Entfernt alle Übergänge die 'knoten' beinhalten
   def entferne_knoten(knoten)
@@ -133,18 +138,44 @@ class PetriNetz
     end
   end
 
+  # Findet den Vorbereich des Knotens k heraus
+  def vorbereich(knoten)
+    vor = []
+    # Ist der Knoten eine Stelle kommen nur Transitionen im Vorbereich vor
+    if @stellen.include?(knoten)
+      @transitionen.each do |t|
+        # Kommt im Nachbereich der Transition der Knoten vor
+        if @fluss.values_at(t).join(', ').split(', ').include?(knoten)
+          # Füge t zum Vorbereich hinzu
+          vor.push(t)
+        end
+      end
+      # Ist der Knoten eine Transition kommen nur Stellen im Vorbereich vor
+    elsif @transitionen.include?(knoten)
+      @stellen.each do |s|
+        # Kommt im Nachbereich der Stelle der Knoten vor
+        if @fluss.values_at(s).join(', ').split(', ').include?(knoten)
+          # Füge s zum Vorbereich hinzu
+          vor.push(s)
+        end
+      end
+    end
+    # return vor
+    vor
+  end
+
   # Prüfe das Netz auf isolierte Knoten und entferne sie
   def deisoliere
     # Prüfe auf isolierte Stellen
     @stellen.each do |s|
-      unless @fluss.values.include?(s) || @fluss.keys.include?(s)
-        # Es muss nur die Stelle gelöscht werden.
+      if !@fluss.values.join(', ').split(', ').include?(s) && !@fluss.keys.include?(s)
+        # Es muss nur die Stelle s gelöscht werden
         @stellen.delete(s)
       end
     end
     # Prüfe auf isolierte Transitionen
     @transitionen.each do |t|
-      unless @fluss.values.include?(t) || @fluss.keys.include?(t)
+      if !@fluss.values.join(', ').split(', ').include?(t) && !@fluss.keys.include?(t)
         # Es muss nur die Transition gelöscht werden.
         @transitionen.delete(t)
       end
@@ -180,6 +211,7 @@ end
 beispiel = PetriNetz.new('s1:t1,t2;;t1:s1;t2:s1;;', '1')
 
 # Tests
+beispiel.deisoliere
 #beispiel.pn
 #beispiel.testnetz
 beispiel.gv
