@@ -97,7 +97,7 @@ class PetriNetz
   #           UTILS
   # --------------------------
 
-  #
+  # Entfernt alle Übergänge die 'knoten' beinhalten
   def entferne_knoten(knoten)
     # Der Knoten k ist eine Stelle,
     # entferne also Stellen aus Übergängen von Transitionen
@@ -114,6 +114,7 @@ class PetriNetz
           end
         end
       end
+      @fluss.delete(knoten)
       # Ansonsten: Ist der Knoten k eine Transition?
     elsif @transitionen.include?(knoten)
       @stellen.each do |s|
@@ -127,6 +128,25 @@ class PetriNetz
             @fluss[s] = @fluss[s] - [knoten]
           end
         end
+      end
+      @fluss.delete(knoten)
+    end
+  end
+
+  # Prüfe das Netz auf isolierte Knoten und entferne sie
+  def deisoliere
+    # Prüfe auf isolierte Stellen
+    @stellen.each do |s|
+      unless @fluss.values.include?(s) || @fluss.keys.include?(s)
+        # Es muss nur die Stelle gelöscht werden.
+        @stellen.delete(s)
+      end
+    end
+    # Prüfe auf isolierte Transitionen
+    @transitionen.each do |t|
+      unless @fluss.values.include?(t) || @fluss.keys.include?(t)
+        # Es muss nur die Transition gelöscht werden.
+        @transitionen.delete(t)
       end
     end
   end

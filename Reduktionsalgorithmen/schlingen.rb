@@ -16,25 +16,27 @@ schlinge.transitionen.each do |t|
     schlinge.transitionen.each do |t0|
       if t0 != t
         if schlinge.fluss.values_at(n).join(', ').split(', ').include?(t0)
-          # Streiche t aus allen Nachbereichen in denen sie vorkommt
-          schlinge.stellen.each do |s|
-            if schlinge.fluss.values_at(s).join(', ') == t
-              schlinge.fluss.delete(s)
-            else
-              schlinge.fluss[s] = schlinge.fluss[s] - [t]
-            end
-          end
           # Streiche den Nachbereich von t
-
-          # Streiche den Übergang zum Nachbereich von t
-          schlinge.fluss.delete(t)
-          # Streiche t
+          schlinge.fluss[t].each do |s|
+            # Streiche alle Übergänge
+            schlinge.entferne_knoten(s)
+            # Streiche die Markierung der Stelle s
+            schlinge.markierung.delete(schlinge.stellen.index(s))
+            # Streiche die Stelle selber
+            schlinge.stellen.delete(s)
+          end
+          # Streiche t aus allen Übergängen
+          schlinge.entferne_knoten(t)
+          # Streiche zum Schluss t
           schlinge.transitionen.delete(t)
         end
       end
     end
   end
 end
+
+# Zuletzt werden alle isolierten Knoten gestrichen
+schlinge.deisoliere
 
 schlinge.testnetz
 schlinge.gv

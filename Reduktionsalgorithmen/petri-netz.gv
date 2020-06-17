@@ -1,14 +1,4 @@
 digraph petrinet{
 node[shape=circle];
 rankdir=LR;
-"s2";
-"s3";
-"t2" [shape=box];
-"t3" [shape=box];
-"t4" [shape=box];
-"s2"->"t2"
-"s3"->"t3"
-"s3"->"t4"
-"t2"->"s3"
-"t4"->"s2"
 }

@@ -17,13 +17,7 @@ parallel.stellen.each_with_index do |s1, i1|
       # s1 hat mehr Marken und wird entfernt
       if parallel.markierung[i1] > parallel.markierung[i2]
         # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
-        parallel.transitionen.each do |t|
-          next if parallel.fluss.values_at(t).join(', ') == ''
-
-          if parallel.fluss.values_at(t).join(', ').include?(s1)
-            parallel.fluss[t] = parallel.fluss[t] - [s1]
-          end
-        end
+        parallel.entferne_knoten(s1)
         # Lösche den Übergang zum Nachbereich
         parallel.fluss.delete(s1)
         # Lösche die Markierung der Stelle
@@ -33,13 +27,7 @@ parallel.stellen.each_with_index do |s1, i1|
       # s2 hat mehr Marken und wird entfernt
       elsif parallel.markierung[i2] > parallel.markierung[i1]
         # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
-        parallel.transitionen.each do |t|
-          next if parallel.fluss.values_at(t).join(', ') == ''
-
-          if parallel.fluss.values_at(t).join(', ').include?(s2)
-            parallel.fluss[t] = parallel.fluss[t] - [s2]
-          end
-        end
+        parallel.entferne_knoten(s2)
         # Lösche den Übergang zum Nachbereich
         parallel.fluss.delete(s2)
         # Lösche die Markierung der Stelle

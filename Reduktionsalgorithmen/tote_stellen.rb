@@ -23,18 +23,9 @@ tot.stellen.each do |s|
           tot.fluss.delete(s)
           tot.transitionen.delete(f)
           tot.fluss.delete(f)
-
         end
-
-
-        #p t
-        #p tot.fluss[s].count(t)
-        #p tot.markierung[tot.stellen.index(s)]
       end
     end
-    # Prüfe ob s nicht genug Marken hat um die Transitionen
-    # in ihrem Nachbereich schalten zu lassen.
-    # p tot.fluss[s]
   end
 end
 

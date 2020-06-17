@@ -27,5 +27,8 @@ lebendig.transitionen.each do |t|
   lebendig.transitionen.delete(t)
 end
 
+# Zuletzt werden alle isolierten Knoten gestrichen
+lebendig.deisoliere
+
 lebendig.testnetz
 lebendig.gv
