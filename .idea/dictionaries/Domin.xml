@@ -12,14 +12,17 @@
       <w>markierung</w>
       <w>nachbar</w>
       <w>nachbarliste</w>
+      <w>nachbereich</w>
       <w>netz</w>
       <w>petri</w>
       <w>petrinet</w>
       <w>petrinetz</w>
       <w>pnstring</w>
+      <w>schleife</w>
       <w>stellen</w>
       <w>teile</w>
       <w>transitionen</w>
+      <w>vorbereich</w>
     </words>
   </dictionary>
 </component>
