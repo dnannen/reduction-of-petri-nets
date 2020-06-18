@@ -103,6 +103,7 @@ class PetriNetz
 
 
   # Entfernt alle Übergänge die 'knoten' beinhalten
+  # zusammen mit dem Knoten und der Markierung, sofern es eine Stelle ist
   def entferne_knoten(knoten)
     # Der Knoten k ist eine Stelle,
     # entferne also Stellen aus Übergängen von Transitionen
@@ -119,7 +120,16 @@ class PetriNetz
           end
         end
       end
+
+      # Entferne die Übergänge zum Nachbereich der Stelle
       @fluss.delete(knoten)
+
+      # Entferne die Markierung der Stelle
+      @markierung.delete(@stellen.index(knoten))
+
+      # Entferne die Stelle
+      @stellen.delete(knoten)
+
       # Ansonsten: Ist der Knoten k eine Transition?
     elsif @transitionen.include?(knoten)
       @stellen.each do |s|
@@ -134,7 +144,12 @@ class PetriNetz
           end
         end
       end
+
+      # Entferne die Übergänge zum Nachbereich der Transition
       @fluss.delete(knoten)
+
+      # Entferne die Transition
+      @transitionen.delete(knoten)
     end
   end
 

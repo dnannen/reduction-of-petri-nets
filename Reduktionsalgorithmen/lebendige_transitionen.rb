@@ -12,19 +12,14 @@ lebendig.transitionen.each do |t|
   # ... aber nicht im Vorbereich
   next unless lebendig.fluss.key?(t)
 
-  #Für jede Stelle im Nachbereich von t
+  # Für jede Stelle im Nachbereich von t
   lebendig.fluss[t].each do |s|
-    # Lösche den Knoten s aus allen Übergängen
+    # Entferne den Knoten s aus dem Netz
     lebendig.entferne_knoten(s)
-    lebendig.fluss.delete(s)
 
-    # Lösche nun die Markierung der entfernten Stellen und die Stelle selbst
-    lebendig.markierung.delete_at(lebendig.stellen.index(s))
-    lebendig.stellen.delete(s)
   end
-  # Lösche die Transition und die ausgehenden Übergänge
-  lebendig.fluss.delete(t)
-  lebendig.transitionen.delete(t)
+  # Entferne die Transition t
+  lebendig.entferne_knoten(t)
 end
 
 # Zuletzt werden alle isolierten Knoten gestrichen

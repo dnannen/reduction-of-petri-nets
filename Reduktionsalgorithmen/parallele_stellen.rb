@@ -18,22 +18,12 @@ parallel.stellen.each_with_index do |s1, i1|
       if parallel.markierung[i1] > parallel.markierung[i2]
         # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
         parallel.entferne_knoten(s1)
-        # Lösche den Übergang zum Nachbereich
-        parallel.fluss.delete(s1)
-        # Lösche die Markierung der Stelle
-        parallel.markierung.delete_at(i1)
-        # Lösche zum Schluss die Stelle selbst
-        parallel.stellen.delete(s2)
+
       # s2 hat mehr Marken und wird entfernt
       elsif parallel.markierung[i2] > parallel.markierung[i1]
         # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
         parallel.entferne_knoten(s2)
-        # Lösche den Übergang zum Nachbereich
-        parallel.fluss.delete(s2)
-        # Lösche die Markierung der Stelle
-        parallel.markierung.delete_at(i2)
-        # Lösche zum Schluss die Stelle selbst
-        parallel.stellen.delete(s2)
+
       end
     end
   end
