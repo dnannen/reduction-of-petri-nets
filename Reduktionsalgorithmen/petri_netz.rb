@@ -103,9 +103,8 @@ class PetriNetz
 
   # Entferne eine bestimmte Stelle mitsamt Übergängen
   def entferne_stelle(stelle)
-    # Entferne alle Stellen aus Übergängen von Transitionen
     @transitionen.each do |t|
-      # Entferne die Übergänge der Transitionen t
+      # Entferne die Übergänge zum Vorbereich der Transitionen t
       if @fluss.values_at(t).join(', ').include?(stelle)
         # Kommt nur k vor, lösche den Übergang komplett
         if @fluss.values_at(t).join(', ') == stelle
@@ -130,7 +129,7 @@ class PetriNetz
   # Entferne eine bestimmte Transition mitsamt Übergängen
   def entferne_transition(transition)
     @stellen.each do |s|
-      # Entferne die Übergänge der Transition t
+      # Entferne die Übergänge zum Vorbereich der Transition t
       if @fluss.values_at(s).join(', ').include?(transition)
         # Kommt nur k vor, lösche den Übergang komplett
         if @fluss.values_at(s).join(', ') == transition
@@ -193,6 +192,7 @@ class PetriNetz
     end
   end
 
+  # TODO UPDATE. FUNKTIONIERT NICHT
   # Gibt den pn-String des Netzes aus
   def update_pn
     # Definiere Ausgabestring
@@ -201,9 +201,8 @@ class PetriNetz
     @stellen.each do |s|
       # Füge die Stelle s direkt ein
       string += s + ':'
-      # Füge anschließend alle
+      # Füge anschließend alle folgenden Transitionen ein
       @fluss.values_at(s).join(', ').split(', ').each do |v|
-        string += v + ':;' if v == []
         # Füge kein Komma beim letzten Wert ein
         string += if @fluss.values_at(s).join(', ').split(', ').last == v
                     v + ';'
@@ -221,7 +220,6 @@ class PetriNetz
       string += t + ':'
       # Füge anschließend alle Knoten im Nachbereich ein
       @fluss.values_at(t).join(', ').split(', ').each do |v|
-        string += v + ':;' if v == []
         # Füge kein Komma beim letzten Wert ein
         string += if @fluss.values_at(t).join(', ').split(', ').last == v
                     v + ';'
@@ -253,7 +251,7 @@ class PetriNetz
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s1:t1,t2;;t1:s1;t2:s1;;', '1')
+beispiel = PetriNetz.new('s2:t2;s3:t3,t4;;t2:s3;t3:t4:s2;;', '1')
 
 # Tests
 #beispiel.deisoliere

@@ -30,7 +30,7 @@ kandidaten.each do |k|
   vorundnach.fluss[k].each do |nt|
 
     # Entferne k aus den Kandidaten, sofern die Nachbereichstransitionen
-    # noch andere Stellen außer k im Vorbereich habendd
+    # noch andere Stellen außer k im Vorbereich haben
     # Die Vielfachheit der von k ausgehenden Kanten ist immer gleich
     # Definiere die Vielfachheit des ersten Übergangs
     vielfachheit = vorundnach.fluss[k].count(nt)
@@ -38,6 +38,21 @@ kandidaten.each do |k|
       # Entferne den Kandidaten, wenn die Vielfachheit verschieden ist
       kandidaten.delete(k) if vorundnach.fluss[k].count(v) != vielfachheit
     end
+  end
+
+  # Letzte Fallunterscheidung
+  # Entweder hat k nur eine Transition im Nachbereich
+  if vorundnach.fluss[k].length == 1
+    vorundnach.vorbereich(k).each do |v|
+      # Vielfachheit von oben teilt den Übergang
+      p vorundnach.fluss[v].join(', ').split(', ').count(k)
+      unless vorundnach.fluss[v].join(', ').split(', ').count(k) % vielfachheit = 0
+        kandidaten.delete(k)
+      end
+    end
+  # oder mehr als eine Transition im Nachbereich
+  elsif vorundnach.fluss[k].length > 1
+
   end
 end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
+
 require File.join(Dir.pwd, 'petri_netz.rb')
 
-# Erzeuge das Petri-Netz
 lebendig = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1;t2:s3;t3:s1;t4:s2;;', '0,1,0')
 
 # Regel 1:
@@ -23,6 +23,7 @@ def reduziere_lebendige_transitionen(lebendig)
     # Entferne jede Stelle im Nachbereich von t,
     # mitsamt Übergängen
     lebendig.fluss[t].each do |s|
+      lebendig.markierung.delete(lebendig.stellen.index(s).to_i)
       lebendig.entferne_stelle(s)
     end
 
