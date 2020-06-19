@@ -6,6 +6,13 @@ require File.join(Dir.pwd, 'petri_netz.rb')
 # Importiere alle Reduktionsalgorithmen
 require File.join(Dir.pwd, 'lebendige_transitionen.rb')
 require File.join(Dir.pwd, 'tote_stellen.rb')
+require File.join(Dir.pwd, 'parallele_stellen.rb')
+require File.join(Dir.pwd, 'aequivalente_stellen.rb')
+require File.join(Dir.pwd, 'vor_und_nachtransitionen.rb')
+require File.join(Dir.pwd, 'vor_mit_nachtransitionen.rb')
+require File.join(Dir.pwd, 'schlingen.rb')
+require File.join(Dir.pwd, 'lauf_stellen.rb')
+require File.join(Dir.pwd, 'vor_mit_nachstellen.rb')
 
 # Erzeuge das Petri-Netz für die Reduktion
 petrinetz = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1;t2:s3;t3:s1;t4:s2;;', '0,1,0')
@@ -13,6 +20,20 @@ petrinetz = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1;t2:s3;t3:s1;t4:s2;;', '0,
 reduziere_lebendige_transitionen(petrinetz)
 
 #reduziere_tote_stellen(petrinetz)
+
+#reduziere_parallele_stellen(petrinetz)
+
+#reduziere_aequivalente_stellen(petrinetz)
+
+#verschmelze_vor_und_nachbereich(petrinetz)
+
+#verschmelze_vor_mit_nachbereich(petrinetz)
+
+#reduziere_schlingen(petrinetz)
+
+#reduziere_laufstellen(petrinetz)
+
+#verschmelze_vor_mit_nachstellen
 
 petrinetz.testnetz
 petrinetz.gv

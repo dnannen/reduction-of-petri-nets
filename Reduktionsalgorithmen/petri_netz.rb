@@ -203,11 +203,11 @@ class PetriNetz
       string += s + ':'
       # Füge anschließend alle folgenden Transitionen ein
       @fluss.values_at(s).join(', ').split(', ').each do |v|
-        # Füge kein Komma beim letzten Wert ein
-        string += if @fluss.values_at(s).join(', ').split(', ').last == v
-                    v + ';'
+        string += v
+        string += if @stellen.last == v
+                    ';'
                   else
-                    v + ','
+                    ','
                   end
       end
       # Füge die Trennung zwischen Stellen und Transitionen ein
@@ -220,11 +220,11 @@ class PetriNetz
       string += t + ':'
       # Füge anschließend alle Knoten im Nachbereich ein
       @fluss.values_at(t).join(', ').split(', ').each do |v|
-        # Füge kein Komma beim letzten Wert ein
-        string += if @fluss.values_at(t).join(', ').split(', ').last == v
-                    v + ';'
+        string += v
+        string += if @transitionen.last == v
+                    ';'
                   else
-                    v + ','
+                    ','
                   end
       end
     end
@@ -254,8 +254,6 @@ end
 beispiel = PetriNetz.new('s2:t2;s3:t3,t4;;t2:s3;t3:t4:s2;;', '1')
 
 # Tests
-#beispiel.deisoliere
-#beispiel.update_pn
-#beispiel.pn
+beispiel.update_pn
+p beispiel.pn
 #beispiel.testnetz
-#beispiel.gv
