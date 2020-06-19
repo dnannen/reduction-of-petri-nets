@@ -3,7 +3,7 @@
 require File.join(Dir.pwd, 'petri_netz.rb')
 
 # Testobjekt für diesen Reduktionsschritt
-aequ = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;s5:t2,t3;;t1:s2;t2:s4;t3:s4;t4:s1', '0,1,0,0')
+aequ = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;s5:t2,t3;;t1:s2;t2:s4;t3:s4;t4:s1;;', '0,1,0,0')
 
 # Fülle das Array Kandidaten mit den Stellen, die der Voraussetzung entsprechen
 kandidaten = []

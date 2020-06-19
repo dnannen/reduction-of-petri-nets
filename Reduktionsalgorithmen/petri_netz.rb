@@ -101,56 +101,52 @@ class PetriNetz
   #           UTILS
   # --------------------------
 
-
-  # Entfernt alle Übergänge die 'knoten' beinhalten
-  # zusammen mit dem Knoten und der Markierung, sofern es eine Stelle ist
-  def entferne_knoten(knoten)
-    # Der Knoten k ist eine Stelle,
-    # entferne also Stellen aus Übergängen von Transitionen
-    if @stellen.include?(knoten)
-      @transitionen.each do |t|
-        # Entferne die Übergänge der Transition t
-        if @fluss.values_at(t).join(', ').include?(knoten)
-          # Kommt nur k vor, lösche den Übergang komplett
-          if @fluss.values_at(t).join(', ') == knoten
-            @fluss.delete(t)
-          else
-            # Ansonsten entferne nur k aus dem Übergang
-            @fluss[t] = @fluss[t] - [knoten]
-          end
+  # Entferne eine bestimmte Stelle mitsamt Übergängen
+  def entferne_stelle(stelle)
+    # Entferne alle Stellen aus Übergängen von Transitionen
+    @transitionen.each do |t|
+      # Entferne die Übergänge der Transitionen t
+      if @fluss.values_at(t).join(', ').include?(stelle)
+        # Kommt nur k vor, lösche den Übergang komplett
+        if @fluss.values_at(t).join(', ') == stelle
+          @fluss.delete(t)
+        else
+          # Ansonsten entferne nur k aus dem Übergang
+          @fluss[t] = @fluss[t] - [stelle]
         end
       end
-
-      # Entferne die Übergänge zum Nachbereich der Stelle
-      @fluss.delete(knoten)
-
-      # Entferne die Markierung der Stelle
-      @markierung.delete(@stellen.index(knoten))
-
-      # Entferne die Stelle
-      @stellen.delete(knoten)
-
-      # Ansonsten: Ist der Knoten k eine Transition?
-    elsif @transitionen.include?(knoten)
-      @stellen.each do |s|
-        # Entferne die Übergänge der Stelle s
-        if @fluss.values_at(s).join(', ').include?(knoten)
-          # Kommt nur k vor, lösche den Übergang komplett
-          if @fluss.values_at(s).join(', ') == knoten
-            @fluss.delete(s)
-          else
-            # Ansonsten entferne nur k aus dem Übergang
-            @fluss[s] = @fluss[s] - [knoten]
-          end
-        end
-      end
-
-      # Entferne die Übergänge zum Nachbereich der Transition
-      @fluss.delete(knoten)
-
-      # Entferne die Transition
-      @transitionen.delete(knoten)
     end
+
+    # Entferne die Übergänge zum Nachbereich der Stelle
+    @fluss.delete(stelle)
+
+    # Entferne die Markierung der Stelle
+    @markierung.delete(@stellen.index(stelle))
+
+    # Entferne die Stelle
+    @stellen.delete(stelle)
+  end
+
+  # Entferne eine bestimmte Transition mitsamt Übergängen
+  def entferne_transition(transition)
+    @stellen.each do |s|
+      # Entferne die Übergänge der Transition t
+      if @fluss.values_at(s).join(', ').include?(transition)
+        # Kommt nur k vor, lösche den Übergang komplett
+        if @fluss.values_at(s).join(', ') == transition
+          @fluss.delete(s)
+        else
+          # Ansonsten entferne nur k aus dem Übergang
+          @fluss[s] = @fluss[s] - [transition]
+        end
+      end
+    end
+
+    # Entferne die Übergänge zum Nachbereich der Transition
+    @fluss.delete(transition)
+
+    # Entferne die Transition
+    @transitionen.delete(transition)
   end
 
   # Findet den Vorbereich des Knotens k heraus
@@ -198,16 +194,45 @@ class PetriNetz
   end
 
   # Gibt den pn-String des Netzes aus
-  def pn
+  def update_pn
+    # Definiere Ausgabestring
     string = ''
+    # Füge zuerst alle Stellen ein
     @stellen.each do |s|
-      p hin[@stellen.index(s)]
-      @transitionen.each_index do |i|
-        if hin[@stellen.index(s)][i] > 1
-          #TODO
-        end
+      # Füge die Stelle s direkt ein
+      string += s + ':'
+      # Füge anschließend alle
+      @fluss.values_at(s).join(', ').split(', ').each do |v|
+        string += v + ':;' if v == []
+        # Füge kein Komma beim letzten Wert ein
+        string += if @fluss.values_at(s).join(', ').split(', ').last == v
+                    v + ';'
+                  else
+                    v + ','
+                  end
+      end
+      # Füge die Trennung zwischen Stellen und Transitionen ein
+      string += ';' if @stellen.last == s
+    end
+
+    # Füge nach den Stellen die Transitionen ein
+    @transitionen.each do |t|
+      # Füge die Transitionen direkt ein
+      string += t + ':'
+      # Füge anschließend alle Knoten im Nachbereich ein
+      @fluss.values_at(t).join(', ').split(', ').each do |v|
+        string += v + ':;' if v == []
+        # Füge kein Komma beim letzten Wert ein
+        string += if @fluss.values_at(t).join(', ').split(', ').last == v
+                    v + ';'
+                  else
+                    v + ','
+                  end
       end
     end
+    # Beende den String und gebe ihn aus
+    string += ';'
+    @pnstring = string
   end
 
   # Gibt alle Parameter des Netzes aus,
@@ -220,13 +245,19 @@ class PetriNetz
     p @hin
     p @her
   end
+
+  # Gibt nur den pn-String aus, um ausgegeben oder weiterverarbeitet zu werden
+  def pn
+    @pnstring
+  end
 end
 
 # Testobjekt
 beispiel = PetriNetz.new('s1:t1,t2;;t1:s1;t2:s1;;', '1')
 
 # Tests
-beispiel.deisoliere
+#beispiel.deisoliere
+#beispiel.update_pn
 #beispiel.pn
 #beispiel.testnetz
-beispiel.gv
+#beispiel.gv
