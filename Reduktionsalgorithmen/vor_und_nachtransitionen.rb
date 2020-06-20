@@ -46,7 +46,7 @@ kandidaten.each do |k|
     vorundnach.vorbereich(k).each do |v|
       # Vielfachheit von oben teilt den Übergang
       p vorundnach.fluss[v].join(', ').split(', ').count(k)
-      unless vorundnach.fluss[v].join(', ').split(', ').count(k) % vielfachheit = 0
+      unless vorundnach.fluss[v].join(', ').split(', ').count(k) % vielfachheit.zero?
         kandidaten.delete(k)
       end
     end

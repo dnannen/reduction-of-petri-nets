@@ -9,30 +9,30 @@ tot = PetriNetz.new('s1:t1,t3;s2:t1;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
 # Es existiert eine Stelle ohne Vorbereich, die nicht ausreichend Marken hat,
 # um Transitionen in ihrem Nachbereich schalten zu lassen.
 def reduziere_tote_stellen(tot)
-
+  # Erstelle ein Array aus Reduktionskandidaten
+  kandidaten = []
   # Prüfe alle Stellen
   tot.stellen.each do |s|
     # Prüfe ob s keinen Vorbereich hat
-    next if tot.fluss.value?([s])
+    next if tot.vorbereich(s) != []
 
-    tot.transitionen.each do |t|
-      # Die Stelle s hat nicht genug Marken um die Transitionen
-      # in ihrem Nachbereich schalten zu lassen
-      next unless tot.fluss[s].include?(t) && tot.fluss[s].count(t) > tot.markierung[tot.stellen.index(s)].to_i
+    # Füge eine Kontrollvariable ein
+    gilt = false
+    tot.her[tot.stellen.index(s)].each do |h|
+      # Sofern s keinen Übergang zu h hat kann sie ignoriert werden.
+      next if h.zero?
 
-      # Für jede Transition im Nachbereich von s
-      tot.fluss[s].each do |f|
-        tot.stellen.each do |st|
-          unless tot.fluss[st].nil?
-            # Lösche alle Stellen, die auf Nachbereichstransitionen von s zeigen
-            tot.fluss.delete(st) if tot.fluss[st].include? f
-          end
-        end
-        # Entferne die Stelle s
-        tot.entferne_stelle(s)
-        # Entferne die Nachbereichstransition f
-        tot.entferne_transition(f)
-      end
+      # Hat s nicht genug marken um mindestens eine Transition schalten zu können
+      gilt = h > tot.markierung[tot.stellen.index(s)].to_i
     end
+    kandidaten.append(s) if gilt && !kandidaten.include?(s)
+  end
+
+  # Reduziere alle gefundenen Kandidaten
+  kandidaten.each do |k|
+    tot.fluss[k].each do |t|
+      tot.reduziere_knoten(t)
+    end
+    tot.reduziere_knoten(k)
   end
 end

@@ -60,9 +60,9 @@ class PetriNetz
   end
 
   # Erzeugt die GraphViz-Datei, die das Netz grafisch darstellt
-  def gv
+  def gv(name)
     # Erzeugen der Datei und die ersten Zeilen, die die Datei ausmachen
-    graph = File.new('petri-netz.gv', 'w')
+    graph = File.new(name + '.gv', 'w')
     graph.puts('digraph petrinet{')
     graph.puts('node[shape=circle];')
     graph.puts('rankdir=LR;')
@@ -101,51 +101,54 @@ class PetriNetz
   #           UTILS
   # --------------------------
 
-  # Entferne eine bestimmte Stelle mitsamt Übergängen
-  def entferne_stelle(stelle)
-    @transitionen.each do |t|
-      # Entferne die Übergänge zum Vorbereich der Transitionen t
-      if @fluss.values_at(t).join(', ').include?(stelle)
-        # Kommt nur k vor, lösche den Übergang komplett
-        if @fluss.values_at(t).join(', ') == stelle
-          @fluss.delete(t)
-        else
-          # Ansonsten entferne nur k aus dem Übergang
-          @fluss[t] = @fluss[t] - [stelle]
+  # Entfernt den angegebenen Knoten mitsamt Übergängen
+  def reduziere_knoten(knoten)
+    # Der Knoten k ist eine Stelle,
+    # entferne also Stellen aus Übergängen von Transitionen
+    if @stellen.include?(knoten)
+      @transitionen.each do |t|
+        # Entferne die Übergänge der Transition t
+        if @fluss.values_at(t).join(', ').include?(knoten)
+          # Kommt nur k vor, lösche den Übergang komplett
+          if @fluss.values_at(t).join(', ') == knoten
+            @fluss.delete(t)
+          else
+            # Ansonsten entferne nur k aus dem Übergang
+            @fluss[t] = @fluss[t] - [knoten]
+          end
         end
       end
-    end
 
-    # Entferne die Übergänge zum Nachbereich der Stelle
-    @fluss.delete(stelle)
+      # Entfernt die Markierung der Stelle
+      @markierung.delete_at(@stellen.index(knoten))
 
-    # Entferne die Markierung der Stelle
-    @markierung.delete(@stellen.index(stelle))
+      # Entfernt die Übergänge zum Nachbereich der Stelle
+      @fluss.delete(knoten)
 
-    # Entferne die Stelle
-    @stellen.delete(stelle)
-  end
+      # Entfernt die Stelle selber
+      @stellen.delete(knoten)
 
-  # Entferne eine bestimmte Transition mitsamt Übergängen
-  def entferne_transition(transition)
-    @stellen.each do |s|
-      # Entferne die Übergänge zum Vorbereich der Transition t
-      if @fluss.values_at(s).join(', ').include?(transition)
-        # Kommt nur k vor, lösche den Übergang komplett
-        if @fluss.values_at(s).join(', ') == transition
-          @fluss.delete(s)
-        else
-          # Ansonsten entferne nur k aus dem Übergang
-          @fluss[s] = @fluss[s] - [transition]
+      # Ansonsten: Ist der Knoten k eine Transition?
+    elsif @transitionen.include?(knoten)
+      @stellen.each do |s|
+        # Entferne die Übergänge der Stelle s
+        if @fluss.values_at(s).join(', ').include?(knoten)
+          # Kommt nur k vor, lösche den Übergang komplett
+          if @fluss.values_at(s).join(', ') == knoten
+            @fluss.delete(s)
+          else
+            # Ansonsten entferne nur k aus dem Übergang
+            @fluss[s] = @fluss[s] - [knoten]
+          end
         end
       end
+
+      # Entfernt die Übergänge zum Nachbereich der Stelle
+      @fluss.delete(knoten)
+
+      # Entfernt die Transition selber
+      @transitionen.delete(knoten)
     end
-
-    # Entferne die Übergänge zum Nachbereich der Transition
-    @fluss.delete(transition)
-
-    # Entferne die Transition
-    @transitionen.delete(transition)
   end
 
   # Findet den Vorbereich des Knotens k heraus
@@ -246,14 +249,15 @@ class PetriNetz
 
   # Gibt nur den pn-String aus, um ausgegeben oder weiterverarbeitet zu werden
   def pn
-    @pnstring
+    p @pnstring
   end
 end
 
 # Testobjekt
-beispiel = PetriNetz.new('s2:t2;s3:t3,t4;;t2:s3;t3:t4:s2;;', '1')
+beispiel = PetriNetz.new('s1:t1,t3;s2:t1;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
 
 # Tests
-beispiel.update_pn
-p beispiel.pn
+#beispiel.update_pn
+#beispiel.pn
 #beispiel.testnetz
+#beispiel.gv('test')

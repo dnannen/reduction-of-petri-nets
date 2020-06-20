@@ -1,0 +1,9 @@
+digraph petrinet{
+node[shape=circle];
+rankdir=LR;
+"s2";
+"s3";
+"t2" [shape=box];
+"s3"->"t2"
+"t2"->"s2"
+}
