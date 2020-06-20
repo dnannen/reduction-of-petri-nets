@@ -8,6 +8,10 @@ tot = PetriNetz.new('s1:t1,t3;s2:t1;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
 # Regel 2:
 # Es existiert eine Stelle ohne Vorbereich, die nicht ausreichend Marken hat,
 # um Transitionen in ihrem Nachbereich schalten zu lassen.
+
+# Das Vorgehen hier ist wiefolgt:
+# Treffen alle Voraussetzungen auf eine Stelle zu, füge diese zu einem Array hinzu.
+# Reduziere später alle Stellen in diesem Array.
 def reduziere_tote_stellen(tot)
   # Erstelle ein Array aus Reduktionskandidaten
   kandidaten = []
