@@ -3,11 +3,11 @@
 require File.join(Dir.pwd, 'petri_netz.rb')
 
 # Testobjekt für diesen Reduktionsschritt
-vorundnach = PetriNetz.new('s1:t1,t2;s2:t4;s3:;s4:t3;;t1:s3;t2:s4;t3:s4,s4;t4:s1,s3;;', '1,1,0,0')
+vorundnach = PetriNetz.new('s1:t1,t2;s2:t4;s3:;s4:t3;;t1:s3;t2:s4;t3:s4,s4;t4:s1,s3;;', '0,1,0,0')
 
 # Regel 5:
 # Es gibt eine Stelle s mit nicht-leerem Vor- und Nachbereich
-# Es gibt keine Schleife an s
+# An s hängt keine Schlinge
 # Der Nachbereich vom Nachbereich der Stelle s ist nicht leer
 # Der Vorbereich vom Nachbereich enthält nur s selber
 # Die Vielfachheit der im Nachbereich von s eingehenden Kanten ist immer gleich k
