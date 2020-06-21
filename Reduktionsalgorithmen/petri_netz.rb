@@ -211,26 +211,34 @@ class PetriNetz
   def update_pn
     # Definiere den Ausgabestring
     string = ''
-    # Gehe alle Übergänge durch (von - nach)
-    @fluss.keys.each_with_index do |k, _i|
-      if @stellen.include?(k) || @transitionen.include?(k)
-        # Füge den Ausgangsknoten gemäß der Syntax ein
-        string += k + ':'
-        # Fahre auch bei leerem Value fort
-
-        # Füge nun alle Zielknoten ein
-        @fluss.values_at(k).join(', ').split(', ').each do |v|
-          string += if @fluss.values_at(k).join(', ').split(', ').last == v
-                      v + ';'
-                    else
-                      v + ','
-                    end
-        end
-        # Füge bei der letzten Stelle die Trennung ein
-        string += ';' if k == @stellen.last
-      else
-        # TODO: Füge den fehlenden Knoten hier ein
+    # Starte mit den Stellen
+    @stellen.each do |s|
+      # Füge den Ausgangsknoten gemäß der Syntax ein
+      string += s + ':'
+      @fluss.values_at(s).join(', ').split(', ').each do |v|
+        string += if @fluss.values_at(s).join(', ').split(', ').last == v
+                    v
+                  else
+                    v + ','
+                  end
       end
+      string += ';'
+      # Füge bei der letzten Stelle die Trennung ein
+      string += ';' if s == @stellen.last
+    end
+
+    # Fahre mit den Transitionen fort
+    @transitionen.each do |t|
+      # Füge den Ausgangsknoten gemäß der Syntax ein
+      string += t + ':'
+      @fluss.values_at(t).join(', ').split(', ').each do |v|
+        string += if @fluss.values_at(t).join(', ').split(', ').last == v
+                    v
+                  else
+                    v + ','
+                  end
+      end
+      string += ';'
     end
     # Beende den pn-String und gebe ihn aus
     string += ';'
