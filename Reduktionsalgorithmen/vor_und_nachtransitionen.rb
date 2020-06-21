@@ -69,7 +69,16 @@ end
 kandidaten.each do |k|
   # Ist die Anzahl der Marken auf k größer als die Vielfachheit
   if vorundnach.markierung[vorundnach.markierung[vorundnach.stellen.index(k)].to_i].to_i >= vielfachheit
-    vorundnach.schalte(k)
+    vorundnach.schalte(vorundnach.fluss.values_at(k).join(', ').split(', ')[0])
+  end
+
+  # Füge neue Transitionen ein
+  # Für jede Vorbereichstransition
+  vorundnach.vorbereich(k).each do |v|
+    # Für jede Nachbereichstransition
+    vorundnach.fluss.values_at(k).join(', ').split(', ').each do |n|
+
+    end
   end
 end
 
