@@ -6,10 +6,18 @@ require File.join(Dir.pwd, 'petri_netz.rb')
 vorundnach = PetriNetz.new('s1:t1,t2;s2:t4;s3:;s4:t3;;t1:s3;t2:s4;t3:s4,s4;t4:s1,s3;;', '1,1,0,0')
 
 # Regel 5:
+# Es gibt eine Stelle s mit nicht-leerem Vor- und Nachbereich
+# Es gibt keine Schleife an s
+# Der Nachbereich vom Nachbereich der Stelle s ist nicht leer
+# Der Vorbereich vom Nachbereich enthält nur s selber
+# Die Vielfachheit der im Nachbereich von s eingehenden Kanten ist immer gleich k
+# Fallunterscheidung:
+# Hat s mehrere Nachbereichstransitionen, ist die Anzahl der Marken aus s kleiner als k
+# und die für die Vorbereichstransitionen vons gilt: Die Anzahl der Kanten zwischen
+# jeder Vorbereichstransition und s ist gleich k
 #
-
-
-
+# Hat s nur eine Nachbereichstransition, so gilt für alle Vorbereichstransitionen
+# k teilt die Anzahl der Kanten zwischen jeweils jeder Vorbereichstransition und k
 
 # Erstelle ein Array mit den Stellen, die alle Voraussetzungen erfüllen.
 kandidaten = []
@@ -68,22 +76,45 @@ end
 # Alle Einträge im Array Kandidaten erfüllen alle Voraussetzungen, werden also reduziert
 kandidaten.each do |k|
   # Ist die Anzahl der Marken auf k größer als die Vielfachheit
-  if vorundnach.markierung[vorundnach.markierung[vorundnach.stellen.index(k)].to_i].to_i >= vielfachheit
+  while vorundnach.markierung[vorundnach.markierung[vorundnach.stellen.index(k)].to_i].to_i >= vielfachheit
     vorundnach.schalte(vorundnach.fluss.values_at(k).join(', ').split(', ')[0])
   end
 
   # Füge neue Transitionen ein
   # Für jede Vorbereichstransition
-  vorundnach.vorbereich(k).each do |v|
+  vorundnach.vorbereich(k).each_with_index do |v, i|
     # Für jede Nachbereichstransition
-    vorundnach.fluss.values_at(k).join(', ').split(', ').each do |n|
+    vorundnach.fluss.values_at(k).join(', ').split(', ').each_with_index do |n, j|
+      # Füge eine neue Transition ein
+      vorundnach.transitionen.append('t' + i.to_s + j.to_s)
+      # Der Vorbereich dieser neuen Transition entspricht dem Vorbereich
+      # der ehemaligen Vorbereichstransition v
+      vorundnach.vorbereich(v).each do |nv|
+        vorundnach.fluss[nv] = vorundnach.fluss[nv] + ['t' + i.to_s + j.to_s]
+      end
+      # Der Nachbereich dieser neuen Transition entspricht folgender Formel
+      # n(neu) = v + (F(t1,s)/k) * n
+      # Erstelle ein Array für die neue Transition, das später an den Fluss-Hash angebunden wird
+      nachbereich = [vorundnach.fluss[v]]
+      (vorundnach.fluss[v].count(k) / vielfachheit).times do
+        nachbereich.append(vorundnach.fluss[n])
+      end
+      # Füge den Rest in die neuen Übergänge ein.
+      vorundnach.fluss.store(vorundnach.transitionen.last, nachbereich.join(', ').split(', '))
 
+      # Entferne k aus dem Nachbereich der neuen Transitionen, damit k später sicher entfernt werden kann
+      vorundnach.fluss[vorundnach.transitionen.last].delete(k)
     end
   end
-end
 
-p vielfachheit
-p kandidaten
+  vorundnach.vorbereich(k).each do |v|
+    vorundnach.reduziere_knoten(v)
+  end
+  vorundnach.fluss[k].each do |n|
+    vorundnach.reduziere_knoten(n)
+  end
+  vorundnach.reduziere_knoten(k)
+end
 
 vorundnach.testnetz
 vorundnach.gv('test')

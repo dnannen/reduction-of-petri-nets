@@ -28,6 +28,7 @@ vormitnach.stellen.each do |s|
   kandidaten.append(s)
 end
 
+# Gehe nun alle Kandidaten durch
 kandidaten.each do |k|
   # Alle Vorbereichsstellen haben
 end
