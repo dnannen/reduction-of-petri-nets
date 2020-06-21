@@ -106,7 +106,7 @@ class PetriNetz
     vorbereich(transition).each do |v|
       # Schaltet die Transition
       # Entfernt eine Marke aus der Vorbereichsstelle
-      @markierung[@stellen.index(v)]= @markierung[@stellen.index(v)].to_i - 1
+      @markierung[@stellen.index(v)] = @markierung[@stellen.index(v)].to_i - 1
       # Füge eine Marke in jede Nachbereichstransition ein
       @fluss.values_at(transition).join(', ').split(', ').each do |n|
         @markierung[@stellen.index(n)] = @markierung[@stellen.index(n)].to_i + 1
@@ -211,46 +211,28 @@ class PetriNetz
   def update_pn
     # Definiere den Ausgabestring
     string = ''
-    # Bearbeite zuerst alle Stellen
-    @stellen.each do |s|
-      # Füge die Stelle gemäß Syntax ein
-      string += s + ':'
-      # Füge anschließend alle Nachbereichstransitionen von s gemäß Syntax ein
-      next if @fluss[s].nil?
+    # Gehe alle Übergänge durch (von - nach)
+    @fluss.keys.each_with_index do |k, _i|
+      if @stellen.include?(k) || @transitionen.include?(k)
+        # Füge den Ausgangsknoten gemäß der Syntax ein
+        string += k + ':'
+        # Fahre auch bei leerem Value fort
 
-      @fluss[s].each do |n|
-        # Bei der letzten Transition wird das Semikolon zur Trennung eingefügt,
-        # ansonsten wird ein Semikolon für die nächste Transition eingefügt.
-        string += if @stellen.last(@fluss[s].index(n))
-                    n
-                  else
-                    n + ','
-                  end
-        string += ';'
+        # Füge nun alle Zielknoten ein
+        @fluss.values_at(k).join(', ').split(', ').each do |v|
+          string += if @fluss.values_at(k).join(', ').split(', ').last == v
+                      v + ';'
+                    else
+                      v + ','
+                    end
+        end
+        # Füge bei der letzten Stelle die Trennung ein
+        string += ';' if k == @stellen.last
+      else
+        # TODO: Füge den fehlenden Knoten hier ein
       end
     end
-    # Trennung zwischen Stellen und Transitionen als Doppelsemikolon
-    string += ';'
-
-    # Füge danach alle Transitionen ein
-    @transitionen.each do |t|
-      # Füge die Transition gemäß Syntax ein
-      string += t + ':'
-      # Füge anschließend alle Nachbereichsstellen von t gemäß Syntax ein
-      next if @fluss[t].nil?
-
-      @fluss[t].each do |n|
-        # Bei der letzten Stelle wird das Semikolon zur Trennung eingefügt,
-        # ansonsten wird ein Semikolon für die nächste Stelle eingefügt.
-        string += if @stellen.last(@fluss[t].index(n))
-                    n
-                  else
-                    n + ','
-                  end
-        string += ';'
-      end
-    end
-    # Beenden des Strings mit Doppelsemikolon, Anschließend Ausgabe
+    # Beende den pn-String und gebe ihn aus
     string += ';'
     @pnstring = string
   end
@@ -276,7 +258,7 @@ end
 beispiel = PetriNetz.new('s1:t1,t3;s2:;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
 
 # Tests
-# beispiel.update_pn
-# beispiel.pn
-# beispiel.testnetz
+beispiel.update_pn
+beispiel.pn
+beispiel.testnetz
 # beispiel.gv('test')
