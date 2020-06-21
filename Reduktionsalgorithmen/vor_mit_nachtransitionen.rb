@@ -33,4 +33,4 @@ kandidaten.each do |k|
 end
 
 vormitnach.testnetz
-vormitnach.gv
+vormitnach.gv('test')

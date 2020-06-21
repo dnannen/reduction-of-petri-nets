@@ -3,9 +3,14 @@
 require File.join(Dir.pwd, 'petri_netz.rb')
 
 # Testobjekt für diesen Reduktionsschritt
-vorundnach = PetriNetz.new('s1:t1,t2;s2:t4;s3:;s4:t3;;t1:s3;t2:s4;t3:s4,s4;t4:s1,s3;;', '0,1,0,0')
+vorundnach = PetriNetz.new('s1:t1,t2;s2:t4;s3:;s4:t3;;t1:s3;t2:s4;t3:s4,s4;t4:s1,s3;;', '1,1,0,0')
 
-# Regel 5
+# Regel 5:
+#
+
+
+
+
 # Erstelle ein Array mit den Stellen, die alle Voraussetzungen erfüllen.
 kandidaten = []
 # Definiere die Vielfachheit, die für die Reduktion benötigt wird
@@ -43,28 +48,33 @@ kandidaten.each do |k|
   # Letzte Fallunterscheidung
   # Entweder hat k nur eine Transition im Nachbereich
   if vorundnach.fluss[k].length == 1
+    # Prüfe alle Vorbereichstransitionen
     vorundnach.vorbereich(k).each do |v|
-      # Vielfachheit von oben teilt den Übergang
-      p vorundnach.fluss[v].join(', ').split(', ').count(k)
-      unless vorundnach.fluss[v].join(', ').split(', ').count(k) % vielfachheit.zero?
-        kandidaten.delete(k)
-      end
+      # Vielfachheit von oben teilt die Vielfachheit des Übergang
+      kandidaten.delete(k) unless vorundnach.fluss[v].join(', ').split(', ').count(k) % vielfachheit.zero?
     end
   # oder mehr als eine Transition im Nachbereich
   elsif vorundnach.fluss[k].length > 1
-
+    # Die Vielfachheit ist größer als die Anzahl an Marken aus s.
+    if vorundnach.markierung[vorundnach.stellen.index(k)].to_i < vielfachheit
+      # Die Anzahl der Kanten der Vorbereichstransitionen zui s entspricht der Vielfachheit.
+      vorundnach.vorbereich(k).each do |v|
+        kandidaten.delete(k) unless vorundnach.fluss[v].join(', ').split(', ').count(k) == vielfachheit
+      end
+    end
   end
 end
 
-# Alle Einträge im Array Kandidaten erfüllen alle Voraussetzungen,
-# werden also reduziert
+# Alle Einträge im Array Kandidaten erfüllen alle Voraussetzungen, werden also reduziert
 kandidaten.each do |k|
-  # TODO wird vielleicht später gelöscht
+  # Ist die Anzahl der Marken auf k größer als die Vielfachheit
+  if vorundnach.markierung[vorundnach.markierung[vorundnach.stellen.index(k)].to_i].to_i >= vielfachheit
+    vorundnach.schalte(k)
+  end
 end
 
 p vielfachheit
 p kandidaten
 
-#vorundnach.deisoliere
 vorundnach.testnetz
-vorundnach.gv
+vorundnach.gv('test')

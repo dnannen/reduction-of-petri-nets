@@ -100,6 +100,20 @@ class PetriNetz
   #           UTILS
   # --------------------------
 
+  # Schaltet die Transition einmal
+  # Die Prüfung, ob die Transition schalten kann erfolgt vorher
+  def schalte(transition)
+    vorbereich(transition).each do |v|
+      # Schaltet die Transition
+      # Entfernt eine Marke aus der Vorbereichsstelle
+      @markierung[@stellen.index(v)] = @markierung[@stellen.index(v)].to_i - 1
+      # Füge eine Marke in jede Nachbereichstransition ein
+      @fluss.values_at(transition).join(', ').split(', ').each do |n|
+        @markierung[@stellen.index(n)] = @markierung[@stellen.index(n)].to_i + 1
+      end
+    end
+  end
+
   # Entfernt den angegebenen Knoten mitsamt Übergängen
   def reduziere_knoten(knoten)
     # Der Knoten k ist eine Stelle,
@@ -262,7 +276,7 @@ end
 beispiel = PetriNetz.new('s1:t1,t3;s2:;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
 
 # Tests
-beispiel.update_pn
-beispiel.pn
+# beispiel.update_pn
+# beispiel.pn
 # beispiel.testnetz
 # beispiel.gv('test')
