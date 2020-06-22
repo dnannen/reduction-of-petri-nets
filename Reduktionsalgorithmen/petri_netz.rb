@@ -257,16 +257,12 @@ class PetriNetz
   end
 
   # Gibt nur den pn-String aus, um ausgegeben oder weiterverarbeitet zu werden
-  def pn
+  def ausgabe
     p @pnstring
+    p @markierung
+    gv('Ausgabe')
   end
 end
 
 # Testobjekt
 beispiel = PetriNetz.new('s1:t1,t3;s2:;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
-
-# Tests
-beispiel.update_pn
-beispiel.pn
-beispiel.testnetz
-# beispiel.gv('test')

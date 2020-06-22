@@ -11,11 +11,12 @@ vormitnach = PetriNetz.new('s1:t1,t2;s2:t0;s3:t2;s4:t4;s5:t5;;t0:s1;t1:s4;t2:s5;
 # Der Nachbereich der Stelle s ist nicht leer.
 # An s hängt keine Schlinge.
 # Alle Vorbereichsstellen
+
 # Prüfe alle Stellen
 vormitnach.stellen.each do |s|
 
   # Es gibt genau eine Transition im Vorbereich von s
-  next if vormitnach.vorbereich(s).length > 1
+  next unless vormitnach.vorbereich(s).length == 1
 
   # Der Vorbereich von s hat ausschließlich s im Nachbereich
   next unless vormitnach.fluss[vormitnach.vorbereich(s).join(', ')] == [s]
@@ -35,7 +36,16 @@ vormitnach.stellen.each do |s|
   next unless fuenf
 
   # Alle Kanten die s enthalten, haben die selbe Vielfachheit
+  sechs = false
+  p vormitnach.fluss[s].all? { |n| vormitnach.fluss[s].count(vormitnach.fluss[n].last) }
+  p vormitnach.vorbereich(s).all? { |v| vormitnach.vorbereich(s).count(vormitnach.vorbereich(s).last) }
+
+
+  #
   vielfachheit = 0
+  vormitnach.fluss.each do |f|
+
+  end
 
 
   # Reduziere die Stelle s
@@ -52,8 +62,7 @@ vormitnach.stellen.each do |s|
     vorbereich.append vormitnach.vorbereich(s)
     # Vorbereiche des Nachbereichs von s
     vorbereich.append(vormitnach.vorbereich(n))
-    p s
-    p vorbereich
+
   end
 end
 

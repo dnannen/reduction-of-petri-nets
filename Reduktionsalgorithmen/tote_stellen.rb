@@ -26,7 +26,7 @@ def reduziere_tote_stellen(tot)
       # Sofern s keinen Übergang zu h hat kann sie ignoriert werden.
       next if h.zero?
 
-      # Hat s nicht genug marken um mindestens eine Transition schalten zu können
+      # Hat s nicht genug Marken um mindestens eine Transition schalten zu können
       gilt = h > tot.markierung[tot.stellen.index(s)].to_i
     end
     kandidaten.append(s) if gilt && !kandidaten.include?(s)
