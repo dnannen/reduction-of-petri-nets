@@ -31,11 +31,11 @@ vormitnach.stellen.each do |s|
   # Alle Vorbereichsstellen von t haben nur t im Nachbereich
   fuenf = false
   vormitnach.vorbereich(vormitnach.vorbereich(s).join(', ')).each do |f|
+    p s
+    p f
     fuenf = vormitnach.fluss.values_at(f).join(', ') == vormitnach.vorbereich(s).join(', ')
   end
   next unless fuenf
-
-  p s
 
   # Alle Kanten die s enthalten, haben die selbe Vielfachheit
   next unless vormitnach.fluss[s].all? do |n|
@@ -58,7 +58,6 @@ vormitnach.stellen.each do |s|
 
     # Der Vorbereich der neuen Transition besteht aus den Vorbereichen des Vorbereichs von s und dem Nachbereich von s
     # Vorbereich von s
-
     vorbereich.append vormitnach.vorbereich(vormitnach.vorbereich(s).join(', '))
     # Vorbereiche des Nachbereichs von s
     vorbereich.append(vormitnach.vorbereich(n))
