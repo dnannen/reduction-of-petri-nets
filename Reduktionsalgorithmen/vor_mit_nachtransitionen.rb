@@ -29,13 +29,8 @@ vormitnach.stellen.each do |s|
           vormitnach.fluss[s].include?(vormitnach.vorbereich(s).join(', '))
 
   # Alle Vorbereichsstellen von t haben nur t im Nachbereich
-  fuenf = false
-  vormitnach.vorbereich(vormitnach.vorbereich(s).join(', ')).each do |f|
-    p s
-    p f
-    fuenf = vormitnach.fluss.values_at(f).join(', ') == vormitnach.vorbereich(s).join(', ')
-  end
-  next unless fuenf
+  next if vormitnach.fluss.values_at(vormitnach.vorbereich(vormitnach.vorbereich(s).join(', ')).join(', ')).join(', ') !=
+          vormitnach.vorbereich(s).join(', ')
 
   # Alle Kanten die s enthalten, haben die selbe Vielfachheit
   next unless vormitnach.fluss[s].all? do |n|
