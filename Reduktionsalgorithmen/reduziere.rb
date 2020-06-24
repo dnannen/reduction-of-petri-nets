@@ -79,11 +79,11 @@ ARGV.each do |arg|
     verschmelze_vor_mit_nachbereich(petrinetz)
     reduziere_schlingen(petrinetz)
     reduziere_laufstellen(petrinetz)
-    # verschmelze_vor_mit_nachstellen(petrinetz)
+    verschmelze_vor_mit_nachstellen(petrinetz)
   end
 end
 
 # Entferne isolierte Knoten und gib das Netz aus
 petrinetz.deisoliere
-petrinetz.testnetz
+# petrinetz.testnetz
 petrinetz.ausgabe

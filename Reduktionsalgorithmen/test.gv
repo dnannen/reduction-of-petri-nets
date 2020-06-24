@@ -1,20 +1,14 @@
 digraph petrinet{
 node[shape=circle];
 rankdir=LR;
-"s1";
 "s2";
 "s3";
 "s4";
 "s5";
-"t" [shape=box];
-"t1" [shape=box];
-"t2" [shape=box];
 "t3" [shape=box];
 "t4" [shape=box];
 "t-1" [shape=box];
 "t-2" [shape=box];
-"s1"->"t"
-"s2"->"t1"
 "s2"->"t-1"
 "s3"->"t3"
 "s3"->"t3"
@@ -25,16 +19,16 @@ rankdir=LR;
 "s4"->"t4"
 "s4"->"t4"
 "s4"->"t4"
-"s5"->"t2"
 "s5"->"t-2"
-"t"->"s3"
-"t"->"s4"
-"t1"->"s1"
-"t1"->"s1"
-"t1"->"s3"
-"t2"->"s1"
-"t2"->"s4"
-"t2"->"s4"
 "t3"->"s2"
 "t4"->"s5"
+"t-1"->"s3"
+"t-1"->"s4"
+"t-1"->"s3"
+"t-1"->"s4"
+"t-1"->"s3"
+"t-2"->"s3"
+"t-2"->"s4"
+"t-2"->"s4"
+"t-2"->"s4"
 }
