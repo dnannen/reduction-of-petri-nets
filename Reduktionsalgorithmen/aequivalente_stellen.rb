@@ -2,8 +2,7 @@
 
 require File.join(Dir.pwd, 'petri_netz.rb')
 
-# Testobjekt für diesen Reduktionsschritt
-aequ = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;s5:t2,t3;;t1:s2;t2:s4;t3:s4;t4:s1;;', '0,1,0,0')
+# aequ = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;s5:t2,t3;;t1:s2;t2:s4;t3:s4;t4:s1;;', '0,1,0,0')
 
 # Regel 4: Es gilt
 # Es gibt zwei Stellen mit genau einer Kante zum Nachbereich und keinem leeren Vorbereich
@@ -52,7 +51,9 @@ def reduziere_aequivalente_stellen(aequ)
       # Lösche den Nachbereich der Stelle s2
       aequ.transitionen.delete(aequ.fluss[s2].join(', '))
       # Die eingehenden Übergägne bei s2 werden auf s1 umgeleitet
-      aequ.fluss[aequ.fluss.key([s2])] = aequ.fluss[aequ.fluss.key([s2])] - [s2] + [s1]
+      unless aequ.fluss[aequ.fluss.key([s2])].nil?
+        aequ.fluss[aequ.fluss.key([s2])] = aequ.fluss[aequ.fluss.key([s2])] - [s2] + [s1]
+      end
       # Addiere die Marken beider Stellen und lege sie auf s1
       aequ.markierung[aequ.stellen.index(s1)] = (aequ.markierung[aequ.stellen.index(s1)].to_i +
                                                 aequ.markierung[aequ.stellen.index(s2)].to_i).to_s

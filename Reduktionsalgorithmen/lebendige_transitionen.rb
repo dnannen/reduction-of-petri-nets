@@ -2,7 +2,7 @@
 
 require File.join(Dir.pwd, 'petri_netz.rb')
 
-lebendig = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1;t2:s3;t3:s1;t4:s2;;', '0,1,0')
+# lebendig = PetriNetz.new('s1:t2;s2:t2;s3:t3,t4;;t1:s1;t2:s3;t3:s1;t4:s2;;', '0,1,0')
 
 # Regel 1:
 # Es existiert eine Transition ohne Vorbereich

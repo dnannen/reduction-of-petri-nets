@@ -2,8 +2,7 @@
 
 require File.join(Dir.pwd, 'petri_netz.rb')
 
-# Testobjekt für diesen Reduktionsschritt
-tot = PetriNetz.new('s1:t1,t3;s2:t1;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
+# tot = PetriNetz.new('s1:t1,t3;s2:t1;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
 
 # Regel 2:
 # Es existiert eine Stelle ohne Vorbereich, die nicht ausreichend Marken hat,

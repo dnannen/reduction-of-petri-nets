@@ -262,6 +262,3 @@ class PetriNetz
     gv('Ausgabe')
   end
 end
-
-# Testobjekt
-beispiel = PetriNetz.new('s1:t1,t3;s2:;s3:t2;;t1:s3;t2:s2;t3:;;', '0,1,1')
