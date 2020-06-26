@@ -15,9 +15,9 @@ require File.join(Dir.pwd, 'lauf_stellen.rb')
 require File.join(Dir.pwd, 'vor_mit_nachstellen.rb')
 
 # Tests
-puts("Bitte den pn-String und anschließend die Markierung als String eingeben, Beispiel:")
-puts("'s1:t1,t2,t2,t3;;t1:s1;t2:s1,s1;t3:s1;t4:', '2'")
-petrinetz = PetriNetz.new(gets.chomp, gets.chomp)
+# puts("Bitte den pn-String und anschließend die Markierung als String eingeben, Beispiel:")
+# puts("s1:t2;s2:t3;s3:t1;s4:t4;;t1:s2;t2:s4;t3:s4;t4:s1;; und als Markierung 0,0,0,0")
+petrinetz = PetriNetz.new('s1:t1;s2:;;t1:s1,s2', '1,0')
 # 's1:t2;s2:t3;s3:t1;s4:t4;;t1:s2;t2:s4;t3:s4;t4:s1;;', '0,0,0,0'
 # 's1:t1,t2;s2:t4;s3:;s4:t3;;t1:s3;t2:s4;t3:s4,s4;t4:s1,s3;;', '0,1,0,0'
 # 's1:t2;s2:t3;s3:t1;s4:t4;s5:t2;s5:t2;;t1:s2;t2:s4;t3:s4;t4:s1;;', '0,1,0,0'
@@ -69,5 +69,5 @@ end
 
 # Entferne isolierte Knoten und gib das Netz aus
 petrinetz.deisoliere
-petrinetz.testnetz
+# petrinetz.testnetz
 petrinetz.ausgabe
