@@ -31,4 +31,7 @@ def reduziere_parallele_stellen(parallel)
       end
     end
   end
+
+  # Fürs Protokoll
+  puts("Parallele Stellen reduziert!")
 end

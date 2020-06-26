@@ -67,7 +67,6 @@ def verschmelze_vor_mit_nachstellen(vormitnachstellen)
       vorbereich.clear
       nachbereich.clear
       index += 1
-      reduziert = true
     end
     # Streiche die Vorbereichstransition von s
     vormitnachstellen.reduziere_knoten(vormitnachstellen.vorbereich(t).join(', '))
@@ -75,4 +74,7 @@ def verschmelze_vor_mit_nachstellen(vormitnachstellen)
     # Streiche den Knoten s
     vormitnachstellen.reduziere_knoten(t)
   end
+
+  # Fürs Protokoll
+  puts("Vor- und Nachstellen verscmolzen!")
 end

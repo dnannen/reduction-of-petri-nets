@@ -38,4 +38,7 @@ def reduziere_tote_stellen(tot)
     end
     tot.reduziere_knoten(k)
   end
+
+  # Fürs Protokoll
+  puts("Tote Stellen reduziert!")
 end

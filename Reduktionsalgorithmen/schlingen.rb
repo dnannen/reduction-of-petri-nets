@@ -33,4 +33,7 @@ def reduziere_schlingen(schlinge)
       end
     end
   end
+
+  # Fürs Protokoll
+  puts("Schlingen reduziert!")
 end

@@ -30,4 +30,7 @@ def reduziere_laufstellen(lauf)
     # Streiche die Stelle s aus dem Netz
     lauf.reduziere_knoten(s)
   end
+
+  # Fürs Protokoll
+  puts("Laufstellen reduziert!")
 end

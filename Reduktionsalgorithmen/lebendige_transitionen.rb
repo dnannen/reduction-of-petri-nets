@@ -26,7 +26,7 @@ def reduziere_lebendige_transitionen(lebendig)
     # Entferne die lebendige Transition t
     lebendig.reduziere_knoten(t)
 
-    # Zuletzt werden alle isolierten Knoten gestrichen
-    lebendig.deisoliere
+    # Fürs Protokoll
+    puts("Lebendige Transitionen reduziert!")
   end
 end

@@ -109,4 +109,7 @@ def verschmelze_vor_und_nachbereich(vorundnach)
       vorundnach.reduziere_knoten(s)
     end
   end
+
+  # Fürs Protokoll
+  puts("Vor- mit Nachbereichstransitionen verschmolzen!")
 end

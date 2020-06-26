@@ -257,7 +257,7 @@ class PetriNetz
 
   # Gibt nur den pn-String aus, um ausgegeben oder weiterverarbeitet zu werden
   def ausgabe
-    p @pnstring
+    p update_pn
     p @markierung
     gv('Ausgabe')
   end
