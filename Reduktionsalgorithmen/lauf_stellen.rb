@@ -23,6 +23,7 @@ def reduziere_laufstellen(lauf)
       lauf.stellen.each do |s2|
         lauf.fluss.delete(s2) if lauf.fluss.values_at(s2).join(', ').split(', ').include?(f)
       end
+      # Streiche den Nachbereich von s und die übergebliebenen Übergänge
       lauf.fluss.delete(f)
       lauf.transitionen.delete(f)
     end

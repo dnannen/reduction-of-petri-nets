@@ -26,7 +26,6 @@ def reduziere_parallele_stellen(parallel)
         elsif parallel.markierung[i2] > parallel.markierung[i1]
           # Lösche die Stelle aus allen Nachbereichen in denen sie vorkommt
           parallel.reduziere_knoten(s2)
-
         end
       end
     end

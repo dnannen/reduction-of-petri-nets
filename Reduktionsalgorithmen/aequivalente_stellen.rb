@@ -2,7 +2,7 @@
 
 require File.join(Dir.pwd, 'petri_netz.rb')
 
-aequ = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;s5:t2,t3;;t1:s2;t2:s4;t3:s4;t4:s1;;', '0,1,0,0')
+#aequ = PetriNetz.new('s1:t2;s2:t3;s3:t1;s4:t4;s5:t2,t3;;t1:s2;t2:s4;t3:s4;t4:s1;;', '0,1,0,0')
 
 # Regel 4: Es gilt
 # Es gibt zwei Stellen mit genau einer Kante zum Nachbereich und keinem leeren Vorbereich
@@ -41,6 +41,7 @@ def reduziere_aequivalente_stellen(aequ)
       # Prüfe alle Stellen die nicht s1 oder s2 sind
       aequ.stellen.each do |s|
         next unless s != s1 || s != s2
+        # Fahre fort, sofern s im Vorbereich jeder Transitionen im Nachbereich existiert
         unless aequ.fluss.values_at(s).join(', ').include?(aequ.fluss.values_at(s1).join(', ')) &&
                aequ.fluss.values_at(s).join(', ').include?(aequ.fluss.values_at(s2).join(', '))
           # Gibt es eine solche Stelle die die Bedingung missachtet,

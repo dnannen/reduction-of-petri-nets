@@ -215,6 +215,7 @@ class PetriNetz
       # Füge den Ausgangsknoten gemäß der Syntax ein
       string += s + ':'
       @fluss.values_at(s).join(', ').split(', ').each do |v|
+        # Kommen mehrere Knoten im Nachbereich vor, füge sie mit ',' ein, ansonsten beende die Ausgangsknoten mit ';'
         string += if @fluss.values_at(s).join(', ').split(', ').last == v
                     v
                   else
@@ -231,6 +232,7 @@ class PetriNetz
       # Füge den Ausgangsknoten gemäß der Syntax ein
       string += t + ':'
       @fluss.values_at(t).join(', ').split(', ').each do |v|
+        # Kommen mehrere Knoten im Nachbereich vor, füge sie mit ',' ein, ansonsten beende die Ausgangsknoten mit ';'
         string += if @fluss.values_at(t).join(', ').split(', ').last == v
                     v
                   else
